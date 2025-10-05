@@ -6,6 +6,14 @@ Start by finding a Sunday date to use: if today is a Sunday, use today's date; o
 
 Now add a date picker to let the user optionally choose a different date to use instead of the default Sunday date.
 
+---
+
+Please find the calendar dates for the the first and last Sunday in the selected lectionary cycle. Include these in parentheses next to the display of the cycle.
+
+---
+
+Add a one-month view of the calendar. Set it by default to display the month with the date the user selected. Allow the user to navigate the month display forward and backward.
+
 
 
 
