@@ -14,8 +14,27 @@ Please find the calendar dates for the the first and last Sunday in the selected
 
 Add a one-month view of the calendar. Set it by default to display the month with the date the user selected. Allow the user to navigate the month display forward and backward.
 
+---
+
+On the month display, label Christmas Day and Easter if they fall within the displayed dates.
+
+---
+
+Now label the four Sundays of Advent on the month display (e.g., "Advent 1", "Advent 2"...). Frame these Sundays with a light purple border (the liturgical color of Advent.)
+
+---
+
+Now remove the initial date picker: let the user use only the month display of the calendar to choose a date. Also, frame the date for Christmas Day in the same purple as for Advent Sundays.
+
+---
+
+
+
+
 
 
 
  Find the assigned readings for that date in the RCL. List the readings for Old Testament, New Testament, Psalm and Gospel.
 
+
+---
