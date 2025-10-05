@@ -1,0 +1,13 @@
+Write a single-page webapp using HTML, CSS and javascript for working with readings from the Revised Common Lectionary (RCL). Always provide a complete single file in your replies to queries.
+
+Start by finding a Sunday date to use: if today is a Sunday, use today's date; otherwise use the date of next Sunday. Determine which lectionary cycle the Sunday date belongs to, that is, A, B, or C. Display the Sunday date and the lectionary cycle. 
+
+---
+
+Now add a date picker to let the user optionally choose a different date to use instead of the default Sunday date.
+
+
+
+
+ Find the assigned readings for that date in the RCL. List the readings for Old Testament, New Testament, Psalm and Gospel.
+
