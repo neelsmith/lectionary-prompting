@@ -29,7 +29,7 @@ Now remove the initial date picker: let the user use only the month display of t
 ---
 
 
-
+On the month display, label Epiphany if it falls within the displayed dates. Label any Sundays between Christmas Day and Epiphany as "Christmastide 1", "Christmastide 2", etc.
 
 
 
