@@ -62,3 +62,13 @@ Label the Sunday after Pentecost "Trinity Sunday", with no label. Label the last
 Great. Now I want to add a new feature. I’m attaching a delimited-text file with assigned readings for liturgical year A. The delimited-text data has 5 columns separated by the pipe character '|', and has a header line. The first column gives the name of the labelled data, 2nd is the assigned Psalms, 3rd is the Old Testament, 4th is the New Testament, and 5th is the Gospel. If the user clicks on a labeled day on the month display in year A **NOT** in the season of Epiphany (identified by labels like "Epiphany 1", "Epiphany 2"), list the assigned readings for the Psalms, Old Testament, New Testament and Gospel. 
 
 ---
+
+Nothing happens when I click on a labelled date in year A.
+
+---
+
+Excellent. Let’s do the same for year B using this data set.
+
+---
+
+Clicking on labelled dates in year A works, but nothing happens when I click on a labelled date in year B.
