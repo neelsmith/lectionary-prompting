@@ -83,3 +83,11 @@ Wonderful. Now I want to change the behavior. Now I want users to be able to see
 ---
 
 For some reason, readings for dates labeled "Christmastide 1", etc, are not being displayed. Could you fix this?
+
+---
+
+Now I'd like to add support for Sundays in Pentecost labelled "Pentecost 1", "Pentecost 2", etc. The readings for these Sundays appear in the data for years A,B,C as "Proper 1", "Proper 2" etc. To match the correct entry for a "Proper" with a Sunday in the Pentecost series,  we begin by counting *backward* from "Christ the King" Sunday. "Christ the King" is always the same as "Proper 29". The Sunday *before* Christ the King is given the readings from "Proper 28"; the Sunday two weeks before Christ the King is given the readings from "Proper 27", etc. The longest possible sequence of Pentecost Sundays would count all the way back to "Proper 1" but in most years, we will reach the Sunday labelled "Epiphany 1" before then.
+
+---
+
+Not getting any readings displayed when clicking on dates in Pentecost. The correct readings selected from the listing of Propers should be displayed when the user clicks on a date in Pentecost.
