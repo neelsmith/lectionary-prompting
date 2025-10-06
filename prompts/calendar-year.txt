@@ -76,3 +76,7 @@ Clicking on labelled dates in year A works, but nothing happens when I click on 
 ---
 
 Great. Now let's implement functionality for year C using this data set.
+---
+
+Wonderful. Now I want to change the behavior. Now I want users to be able to see reading selectionns when they click on a date in Epiphany labelled "Epiphany 1", "Epiphany 2", etc. but *not* when they click on a date in the season of Pentecost labelled "Pentecost 1", "Pentecost 2", etc.  
+
