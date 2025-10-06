@@ -1,0 +1,817 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+        /* Basic CSS for styling the page */
+        :root {
+            --primary-bg: #f8f9fa;
+            --primary-text: #212529;
+            --accent-color: #005a9c;
+            --accent-color-light: #e7f1fa;
+            --purple-season-border: #a98fc1; /* Advent & Lent */
+            --purple-season-text: #8e44ad;
+            --green-season-border: #52a56f;  /* Epiphany & Pentecost-tide */
+            --green-season-text: #27ae60;
+            --ash-wed-color-border: #34495e;
+            --red-day-border: #c0392b; /* Palm Sunday, Pentecost */
+            --card-bg: #ffffff;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --border-color: #ced4da;
+            --light-gray: #6c757d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-size: 2em;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #e9ecef;
+            margin: 24px 0;
+        }
+
+        .date-display {
+            font-size: 1.5em;
+            margin-bottom: 16px;
+            color: #495057;
+        }
+
+        .cycle-display {
+            font-size: 1.2em;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px 12px;
+            margin-bottom: 24px;
+        }
+
+        .cycle-label {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--accent-color);
+            line-height: 1;
+        }
+        
+        .cycle-dates {
+            font-size: 0.9em;
+            color: var(--light-gray);
+        }
+        
+        /* Calendar Styles */
+        .calendar-container {
+            margin-top: 24px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        #monthYearDisplay {
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .nav-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-weekdays {
+            font-weight: 600;
+            color: var(--light-gray);
+            padding-bottom: 10px;
+        }
+        
+        .calendar-weekdays > div {
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .calendar-day {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 42px;
+            border-radius: 8px;
+            position: relative;
+            line-height: 1.2;
+            font-size: 0.9em;
+        }
+
+        .calendar-day.current-month {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .calendar-day.current-month:hover {
+            background-color: var(--accent-color-light);
+        }
+
+        .calendar-day.today { box-shadow: inset 0 0 0 2px var(--light-gray); }
+        .calendar-day.purple-season { box-shadow: inset 0 0 0 2px var(--purple-season-border); }
+        .calendar-day.green-season { box-shadow: inset 0 0 0 2px var(--green-season-border); }
+        .calendar-day.ash-wednesday { box-shadow: inset 0 0 0 2px var(--ash-wed-color-border); }
+        .calendar-day.red-day { box-shadow: inset 0 0 0 2px var(--red-day-border); }
+
+        .calendar-day.selected-day {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            box-shadow: none;
+        }
+
+        .holiday-label {
+            font-size: 9px;
+            margin-top: 1px;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .purple-season .holiday-label { color: var(--purple-season-text); }
+        .green-season .holiday-label { color: var(--green-season-text); }
+        .calendar-day.selected-day .holiday-label { color: var(--accent-color-light); }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: var(--light-gray);
+        }
+    
+
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCL Lectionary Cycle Finder</title>
+    <style>
+        /* Basic CSS for styling the page */
+        :root {
+            --primary-bg: #f8f9fa;
+            --primary-text: #212529;
+            --accent-color: #005a9c;
+            --accent-color-light: #e7f1fa;
+            --purple-season-border: #a98fc1; /* Advent & Lent */
+            --purple-season-text: #8e44ad;
+            --green-season-border: #52a56f;  /* Epiphany & Pentecost-tide */
+            --green-season-text: #27ae60;
+            --ash-wed-color-border: #34495e;
+            --red-day-border: #c0392b; /* Palm Sunday, Pentecost */
+            --card-bg: #ffffff;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --border-color: #ced4da;
+            --light-gray: #6c757d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-size: 2em;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #e9ecef;
+            margin: 24px 0;
+        }
+
+        .date-display {
+            font-size: 1.5em;
+            margin-bottom: 16px;
+            color: #495057;
+        }
+
+        .cycle-display {
+            font-size: 1.2em;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px 12px;
+            margin-bottom: 24px;
+        }
+
+        .cycle-label {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--accent-color);
+            line-height: 1;
+        }
+        
+        .cycle-dates {
+            font-size: 0.9em;
+            color: var(--light-gray);
+        }
+        
+        /* Calendar Styles */
+        .calendar-container {
+            margin-top: 24px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        #monthYearDisplay {
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .nav-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-weekdays {
+            font-weight: 600;
+            color: var(--light-gray);
+            padding-bottom: 10px;
+        }
+        
+        .calendar-weekdays > div {
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .calendar-day {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 42px;
+            border-radius: 8px;
+            position: relative;
+            line-height: 1.2;
+            font-size: 0.9em;
+        }
+
+        .calendar-day.current-month {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .calendar-day.current-month:hover {
+            background-color: var(--accent-color-light);
+        }
+
+        .calendar-day.today { box-shadow: inset 0 0 0 2px var(--light-gray); }
+        .calendar-day.purple-season { box-shadow: inset 0 0 0 2px var(--purple-season-border); }
+        .calendar-day.green-season { box-shadow: inset 0 0 0 2px var(--green-season-border); }
+        .calendar-day.ash-wednesday { box-shadow: inset 0 0 0 2px var(--ash-wed-color-border); }
+        .calendar-day.red-day { box-shadow: inset 0 0 0 2px var(--red-day-border); }
+
+        .calendar-day.selected-day {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            box-shadow: none;
+        }
+
+        .holiday-label {
+            font-size: 9px;
+            margin-top: 1px;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .purple-season .holiday-label { color: var(--purple-season-text); }
+        .green-season .holiday-label { color: var(--green-season-text); }
+        .calendar-day.selected-day .holiday-label { color: var(--accent-color-light); }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: var(--light-gray);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Revised Common Lectionary</h1>
+        
+        <div id="loading">Calculating...</div>
+
+        <div id="results" style="display: none;">
+            <p class="date-display" id="sundayDate"></p>
+            <div class="cycle-display">
+                Lectionary Cycle: 
+                <span class="cycle-label" id="lectionaryCycle"></span>
+                <span class="cycle-dates" id="cycleDateRange"></span>
+            </div>
+
+            <hr>
+
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button id="prevMonthBtn" class="nav-btn" aria-label="Previous month">&lt;</button>
+                    <h3 id="monthYearDisplay"></h3>
+                    <button id="nextMonthBtn" class="nav-btn" aria-label="Next month">&gt;</button>
+                </div>
+                <div class="calendar-grid calendar-weekdays">
+                    <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                </div>
+                <div id="calendarDays" class="calendar-grid"></div>
+            </div>
+        </div>
+
+        <footer>
+            The lectionary cycle begins on the First Sunday of Advent.
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DOM Elements ---
+            const prevMonthBtn = document.getElementById('prevMonthBtn');
+            const nextMonthBtn = document.getElementById('nextMonthBtn');
+
+            // --- App State ---
+            let selectedSunday = null;
+            let calendarViewDate = new Date();
+
+            // --- Core Date Calculation Functions ---
+
+            function getEaster(year) {
+                const a = year % 19, b = Math.floor(year / 100), c = year % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
+                const month = Math.floor((h + l - 7 * m + 114) / 31);
+                const day = ((h + l - 7 * m + 114) % 31) + 1;
+                return new Date(year, month - 1, day);
+            }
+            
+            function getPentecost(year) {
+                const easter = getEaster(year);
+                return new Date(easter.setDate(easter.getDate() + 49));
+            }
+
+            function getAshWednesday(year) {
+                const easter = getEaster(year);
+                return new Date(new Date(easter).setDate(easter.getDate() - 46));
+            }
+            
+            function getFirstSundayOfAdvent(year) {
+                const christmas = new Date(year, 11, 25);
+                const sundayBeforeChristmas = new Date(christmas);
+                sundayBeforeChristmas.setDate(christmas.getDate() - sundayBeforeChristmas.getDay());
+                return new Date(sundayBeforeChristmas.setDate(sundayBeforeChristmas.getDate() - 21));
+            }
+
+            function getHolidayInfoForDate(date, year) {
+                const time = date.getTime();
+                if (date.getMonth() === 11 && date.getDate() === 25) return 'Christmas';
+                if (date.getMonth() === 0 && date.getDate() === 6) return 'Epiphany';
+                
+                const easter = getEaster(year);
+                const pentecost = getPentecost(year);
+                const trinitySunday = new Date(new Date(pentecost).setDate(pentecost.getDate() + 7));
+                const palmSunday = new Date(new Date(easter).setDate(easter.getDate() - 7));
+                const ashWednesday = getAshWednesday(year);
+                const transfiguration = new Date(new Date(ashWednesday).setDate(ashWednesday.getDate() - 3));
+                const firstSundayOfAdvent = getFirstSundayOfAdvent(year);
+                const christTheKing = new Date(new Date(firstSundayOfAdvent).setDate(firstSundayOfAdvent.getDate() - 7));
+
+                if (time === easter.getTime()) return 'Easter';
+                if (time === pentecost.getTime()) return 'Pentecost';
+                if (time === trinitySunday.getTime()) return 'Trinity Sunday';
+                if (time === christTheKing.getTime()) return 'Christ the King';
+                if (time === palmSunday.getTime()) return 'Palm Sunday';
+                if (time === ashWednesday.getTime()) return 'Ash Wednesday';
+                if (time === transfiguration.getTime()) return 'Transfiguration';
+
+                if (date.getDay() === 0) { // Seasonal Sundays
+                    const advent1 = getFirstSundayOfAdvent(year);
+                    for (let i = 0; i < 4; i++) {
+                        if (time === new Date(advent1).setDate(advent1.getDate() + (i * 7))) return `Advent ${i + 1}`;
+                    }
+                    const christmasForSeason = new Date(date.getMonth() === 0 ? year - 1 : year, 11, 25);
+                    if (date > christmasForSeason && date < new Date(date.getMonth() === 0 ? year : year + 1, 0, 6)) {
+                        return `Christmastide ${Math.round((time - getTargetSunday(christmasForSeason).getTime()) / 604800000) + 1}`;
+                    }
+                    if (date >= getTargetSunday(new Date(year, 0, 6)) && date < ashWednesday) {
+                        return `Epiphany ${Math.round((time - getTargetSunday(new Date(year, 0, 6)).getTime()) / 604800000) + 1}`;
+                    }
+                    if (date > ashWednesday && date < easter) {
+                        return `Lent ${Math.round((time - getTargetSunday(ashWednesday).getTime()) / 604800000) + 1}`;
+                    }
+                    if (date > easter && date < pentecost) {
+                        return `Easter ${Math.round((time - easter.getTime()) / 604800000)}`;
+                    }
+                    if (date > trinitySunday && date < christTheKing) {
+                        return `Pentecost ${Math.round((time - pentecost.getTime()) / 604800000)}`;
+                    }
+                }
+                return null;
+            }
+
+            function getLectionaryInfo(date) {
+                const year = date.getFullYear();
+                const firstSundayOfAdventForYear = getFirstSundayOfAdvent(year);
+                let liturgicalYear = (date >= firstSundayOfAdventForYear) ? year + 1 : year;
+                const cycle = ['A', 'B', 'C'][(liturgicalYear - 1) % 3];
+                const startDate = getFirstSundayOfAdvent(liturgicalYear - 1);
+                const endDate = new Date(new Date(getFirstSundayOfAdvent(liturgicalYear)).setDate(getFirstSundayOfAdvent(liturgicalYear).getDate() - 7));
+                return { cycle, startDate, endDate };
+            }
+
+            function getTargetSunday(baseDate) {
+                const date = new Date(baseDate);
+                date.setHours(0, 0, 0, 0);
+                date.setDate(date.getDate() + ((7 - date.getDay()) % 7));
+                return date;
+            }
+
+            function updateLectionaryCycleDisplay(date) {
+                const lectionaryInfo = getLectionaryInfo(date);
+                const cycleDateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+                document.getElementById('lectionaryCycle').textContent = lectionaryInfo.cycle;
+                document.getElementById('cycleDateRange').textContent = 
+                    `(${lectionaryInfo.startDate.toLocaleDateString('en-US', cycleDateOptions)} – ${lectionaryInfo.endDate.toLocaleDateString('en-US', cycleDateOptions)})`;
+            }
+
+            function updateSelectedSundayDisplay(sunday) {
+                const sundayDateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('sundayDate').textContent = sunday.toLocaleDateString('en-US', sundayDateOptions);
+            }
+
+            function renderCalendar() {
+                const month = calendarViewDate.getMonth();
+                const year = calendarViewDate.getFullYear();
+                
+                document.getElementById('monthYearDisplay').textContent = 
+                    calendarViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                const calendarDaysContainer = document.getElementById('calendarDays');
+                calendarDaysContainer.innerHTML = '';
+                const firstDayOfMonth = new Date(year, month, 1);
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const startDayOfWeek = firstDayOfMonth.getDay();
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                for (let i = 0; i < startDayOfWeek; i++) {
+                    calendarDaysContainer.appendChild(document.createElement('div'));
+                }
+
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dayDiv = document.createElement('div');
+                    const dayNumberSpan = document.createElement('span');
+                    dayNumberSpan.textContent = i;
+                    dayDiv.appendChild(dayNumberSpan);
+
+                    const currentDate = new Date(year, month, i);
+                    dayDiv.classList.add('calendar-day', 'current-month');
+                    
+                    if (currentDate.getTime() === today.getTime()) dayDiv.classList.add('today');
+                    if (selectedSunday && currentDate.getTime() === selectedSunday.getTime()) dayDiv.classList.add('selected-day');
+                    
+                    const holidayInfo = getHolidayInfoForDate(currentDate, year);
+                    if (holidayInfo) {
+                        if (holidayInfo.startsWith('Advent') || holidayInfo === 'Christmas' || holidayInfo.startsWith('Lent')) {
+                            dayDiv.classList.add('purple-season');
+                        } else if (holidayInfo.startsWith('Epiphany') || holidayInfo.startsWith('Pentecost ')) {
+                             dayDiv.classList.add('green-season');
+                        } else if (holidayInfo === 'Ash Wednesday') {
+                            dayDiv.classList.add('ash-wednesday');
+                        } else if (holidayInfo === 'Palm Sunday' || holidayInfo === 'Pentecost') {
+                            dayDiv.classList.add('red-day');
+                        }
+                        const holidayLabel = document.createElement('span');
+                        holidayLabel.className = 'holiday-label';
+                        holidayLabel.textContent = holidayInfo;
+                        dayDiv.appendChild(holidayLabel);
+                    }
+                    
+                    dayDiv.addEventListener('click', () => handleDateSelection(new Date(year, month, i)));
+                    calendarDaysContainer.appendChild(dayDiv);
+                }
+            }
+
+            function handleDateSelection(baseDate) {
+                selectedSunday = getTargetSunday(baseDate);
+                calendarViewDate = new Date(selectedSunday.getFullYear(), selectedSunday.getMonth(), 1);
+                updateSelectedSundayDisplay(selectedSunday);
+                updateLectionaryCycleDisplay(selectedSunday);
+                renderCalendar();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('results').style.display = 'block';
+            }
+
+            prevMonthBtn.addEventListener('click', () => {
+                calendarViewDate.setMonth(calendarViewDate.getMonth() - 1);
+                updateLectionaryCycleDisplay(calendarViewDate);
+                renderCalendar();
+            });
+
+            nextMonthBtn.addEventListener('click', () => {
+                calendarViewDate.setMonth(calendarViewDate.getMonth() + 1);
+                updateLectionaryCycleDisplay(calendarViewDate);
+                renderCalendar();
+            });
+
+            handleDateSelection(new Date());
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+							<script>
+                            	
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DOM Elements ---
+            const prevMonthBtn = document.getElementById('prevMonthBtn');
+            const nextMonthBtn = document.getElementById('nextMonthBtn');
+
+            // --- App State ---
+            let selectedSunday = null;
+            let calendarViewDate = new Date();
+
+            // --- Core Date Calculation Functions ---
+
+            function getEaster(year) {
+                const a = year % 19, b = Math.floor(year / 100), c = year % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
+                const month = Math.floor((h + l - 7 * m + 114) / 31);
+                const day = ((h + l - 7 * m + 114) % 31) + 1;
+                return new Date(year, month - 1, day);
+            }
+            
+            function getPentecost(year) {
+                const easter = getEaster(year);
+                return new Date(easter.setDate(easter.getDate() + 49));
+            }
+
+            function getAshWednesday(year) {
+                const easter = getEaster(year);
+                return new Date(new Date(easter).setDate(easter.getDate() - 46));
+            }
+            
+            function getFirstSundayOfAdvent(year) {
+                const christmas = new Date(year, 11, 25);
+                const sundayBeforeChristmas = new Date(christmas);
+                sundayBeforeChristmas.setDate(christmas.getDate() - sundayBeforeChristmas.getDay());
+                return new Date(sundayBeforeChristmas.setDate(sundayBeforeChristmas.getDate() - 21));
+            }
+
+            function getHolidayInfoForDate(date, year) {
+                const time = date.getTime();
+                if (date.getMonth() === 11 && date.getDate() === 25) return 'Christmas';
+                if (date.getMonth() === 0 && date.getDate() === 6) return 'Epiphany';
+                
+                const easter = getEaster(year);
+                const pentecost = getPentecost(year);
+                const trinitySunday = new Date(new Date(pentecost).setDate(pentecost.getDate() + 7));
+                const palmSunday = new Date(new Date(easter).setDate(easter.getDate() - 7));
+                const ashWednesday = getAshWednesday(year);
+                const transfiguration = new Date(new Date(ashWednesday).setDate(ashWednesday.getDate() - 3));
+                const firstSundayOfAdvent = getFirstSundayOfAdvent(year);
+                const christTheKing = new Date(new Date(firstSundayOfAdvent).setDate(firstSundayOfAdvent.getDate() - 7));
+
+                if (time === easter.getTime()) return 'Easter';
+                if (time === pentecost.getTime()) return 'Pentecost';
+                if (time === trinitySunday.getTime()) return 'Trinity Sunday';
+                if (time === christTheKing.getTime()) return 'Christ the King';
+                if (time === palmSunday.getTime()) return 'Palm Sunday';
+                if (time === ashWednesday.getTime()) return 'Ash Wednesday';
+                if (time === transfiguration.getTime()) return 'Transfiguration';
+
+                if (date.getDay() === 0) { // Seasonal Sundays
+                    const advent1 = getFirstSundayOfAdvent(year);
+                    for (let i = 0; i < 4; i++) {
+                        if (time === new Date(advent1).setDate(advent1.getDate() + (i * 7))) return `Advent ${i + 1}`;
+                    }
+                    const christmasForSeason = new Date(date.getMonth() === 0 ? year - 1 : year, 11, 25);
+                    if (date > christmasForSeason && date < new Date(date.getMonth() === 0 ? year : year + 1, 0, 6)) {
+                        return `Christmastide ${Math.round((time - getTargetSunday(christmasForSeason).getTime()) / 604800000) + 1}`;
+                    }
+                    if (date >= getTargetSunday(new Date(year, 0, 6)) && date < ashWednesday) {
+                        return `Epiphany ${Math.round((time - getTargetSunday(new Date(year, 0, 6)).getTime()) / 604800000) + 1}`;
+                    }
+                    if (date > ashWednesday && date < easter) {
+                        return `Lent ${Math.round((time - getTargetSunday(ashWednesday).getTime()) / 604800000) + 1}`;
+                    }
+                    if (date > easter && date < pentecost) {
+                        return `Easter ${Math.round((time - easter.getTime()) / 604800000)}`;
+                    }
+                    if (date > trinitySunday && date < christTheKing) {
+                        return `Pentecost ${Math.round((time - pentecost.getTime()) / 604800000)}`;
+                    }
+                }
+                return null;
+            }
+
+            function getLectionaryInfo(date) {
+                const year = date.getFullYear();
+                const firstSundayOfAdventForYear = getFirstSundayOfAdvent(year);
+                let liturgicalYear = (date >= firstSundayOfAdventForYear) ? year + 1 : year;
+                const cycle = ['A', 'B', 'C'][(liturgicalYear - 1) % 3];
+                const startDate = getFirstSundayOfAdvent(liturgicalYear - 1);
+                const endDate = new Date(new Date(getFirstSundayOfAdvent(liturgicalYear)).setDate(getFirstSundayOfAdvent(liturgicalYear).getDate() - 7));
+                return { cycle, startDate, endDate };
+            }
+
+            function getTargetSunday(baseDate) {
+                const date = new Date(baseDate);
+                date.setHours(0, 0, 0, 0);
+                date.setDate(date.getDate() + ((7 - date.getDay()) % 7));
+                return date;
+            }
+
+            function updateLectionaryCycleDisplay(date) {
+                const lectionaryInfo = getLectionaryInfo(date);
+                const cycleDateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+                document.getElementById('lectionaryCycle').textContent = lectionaryInfo.cycle;
+                document.getElementById('cycleDateRange').textContent = 
+                    `(${lectionaryInfo.startDate.toLocaleDateString('en-US', cycleDateOptions)} – ${lectionaryInfo.endDate.toLocaleDateString('en-US', cycleDateOptions)})`;
+            }
+
+            function updateSelectedSundayDisplay(sunday) {
+                const sundayDateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('sundayDate').textContent = sunday.toLocaleDateString('en-US', sundayDateOptions);
+            }
+
+            function renderCalendar() {
+                const month = calendarViewDate.getMonth();
+                const year = calendarViewDate.getFullYear();
+                
+                document.getElementById('monthYearDisplay').textContent = 
+                    calendarViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                const calendarDaysContainer = document.getElementById('calendarDays');
+                calendarDaysContainer.innerHTML = '';
+                const firstDayOfMonth = new Date(year, month, 1);
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const startDayOfWeek = firstDayOfMonth.getDay();
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                for (let i = 0; i < startDayOfWeek; i++) {
+                    calendarDaysContainer.appendChild(document.createElement('div'));
+                }
+
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dayDiv = document.createElement('div');
+                    const dayNumberSpan = document.createElement('span');
+                    dayNumberSpan.textContent = i;
+                    dayDiv.appendChild(dayNumberSpan);
+
+                    const currentDate = new Date(year, month, i);
+                    dayDiv.classList.add('calendar-day', 'current-month');
+                    
+                    if (currentDate.getTime() === today.getTime()) dayDiv.classList.add('today');
+                    if (selectedSunday && currentDate.getTime() === selectedSunday.getTime()) dayDiv.classList.add('selected-day');
+                    
+                    const holidayInfo = getHolidayInfoForDate(currentDate, year);
+                    if (holidayInfo) {
+                        if (holidayInfo.startsWith('Advent') || holidayInfo === 'Christmas' || holidayInfo.startsWith('Lent')) {
+                            dayDiv.classList.add('purple-season');
+                        } else if (holidayInfo.startsWith('Epiphany') || holidayInfo.startsWith('Pentecost ')) {
+                             dayDiv.classList.add('green-season');
+                        } else if (holidayInfo === 'Ash Wednesday') {
+                            dayDiv.classList.add('ash-wednesday');
+                        } else if (holidayInfo === 'Palm Sunday' || holidayInfo === 'Pentecost') {
+                            dayDiv.classList.add('red-day');
+                        }
+                        const holidayLabel = document.createElement('span');
+                        holidayLabel.className = 'holiday-label';
+                        holidayLabel.textContent = holidayInfo;
+                        dayDiv.appendChild(holidayLabel);
+                    }
+                    
+                    dayDiv.addEventListener('click', () => handleDateSelection(new Date(year, month, i)));
+                    calendarDaysContainer.appendChild(dayDiv);
+                }
+            }
+
+            function handleDateSelection(baseDate) {
+                selectedSunday = getTargetSunday(baseDate);
+                calendarViewDate = new Date(selectedSunday.getFullYear(), selectedSunday.getMonth(), 1);
+                updateSelectedSundayDisplay(selectedSunday);
+                updateLectionaryCycleDisplay(selectedSunday);
+                renderCalendar();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('results').style.display = 'block';
+            }
+
+            prevMonthBtn.addEventListener('click', () => {
+                calendarViewDate.setMonth(calendarViewDate.getMonth() - 1);
+                updateLectionaryCycleDisplay(calendarViewDate);
+                renderCalendar();
+            });
+
+            nextMonthBtn.addEventListener('click', () => {
+                calendarViewDate.setMonth(calendarViewDate.getMonth() + 1);
+                updateLectionaryCycleDisplay(calendarViewDate);
+                renderCalendar();
+            });
+
+            handleDateSelection(new Date());
+        });
+    
+
+							</script>
+                        </body>
+                        </html>
+                    

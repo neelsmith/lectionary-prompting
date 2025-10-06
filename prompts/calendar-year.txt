@@ -45,7 +45,17 @@ Now label the Sundays between Ash Wednesday and Easter as "Lent 1", "Lent 2", et
 
 When the user changes the displayed month, the label giving the lectionary year (A,B,C) with its beginning and end dates should be updated so that it always includes the currently displayed month.
 
+---
 
+Change the label on the Sunday before Easter to "Palm Sunday", and frame it in red, the liturgical color for Palm Sunday.
+
+---
+
+Label Pentecost on the month display, and frame it in red. Label the Sundays between Easter and Pentecost "Easter 1", "Easter 2", etc.
+
+---
+
+Label the Sunday after Pentecost "Trinity Sunday", with no label. Label the last Sunday before Advent "Christ the King", with no label. Label the Sundays between Trinity Sunday and Christ the King "Pentecost 2", "Pentecost 3", etc. (Note that we start with 2 since we've already labelled the first Sunday after Pentecost as Trinity Sunday.) The Sundays labeled "Pentecost 2" etc should be framed in the same green as used for Epiphanytide.
 
 
 
