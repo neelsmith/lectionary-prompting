@@ -80,3 +80,6 @@ Great. Now let's implement functionality for year C using this data set.
 
 Wonderful. Now I want to change the behavior. Now I want users to be able to see reading selectionns when they click on a date in Epiphany labelled "Epiphany 1", "Epiphany 2", etc. but *not* when they click on a date in the season of Pentecost labelled "Pentecost 1", "Pentecost 2", etc.  
 
+---
+
+For some reason, readings for dates labeled "Christmastide 1", etc, are not being displayed. Could you fix this?
