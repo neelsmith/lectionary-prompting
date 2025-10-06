@@ -41,7 +41,9 @@ There should be no frame on Transfiguration Sunday.
 Now label the Sundays between Ash Wednesday and Easter as "Lent 1", "Lent 2", etc, and frame them in the same purple as Advent.
 
 
+---
 
+When the user changes the displayed month, the label giving the lectionary year (A,B,C) with its beginning and end dates should be updated so that it always includes the currently displayed month.
 
 
 
