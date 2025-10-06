@@ -91,3 +91,7 @@ Now I'd like to add support for Sundays in Pentecost labelled "Pentecost 1", "Pe
 ---
 
 Not getting any readings displayed when clicking on dates in Pentecost. The correct readings selected from the listing of Propers should be displayed when the user clicks on a date in Pentecost.
+
+---
+
+Great! For the Sundays in Pentecost where the readings are drawn from entries labelled "Proper N", could you add a reference to the Proper in the heading above the readings? For example, if the heading was "Readings for Pentecost 23 (Year C)", and the displayed readings were taken from Proper 28, could make the heading "Readings for Pentecost 23 (Year C, Proper 28)" ?
