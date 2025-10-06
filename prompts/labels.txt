@@ -5,10 +5,16 @@ Advent 4
 Christmas
 Christmastide 1
 Christmastide 2
-Epiphany
+The Epiphany
 Epiphany 1
 Epiphany 2
-...
+Epiphany 3
+Epiphany 4
+Epiphany 5
+Epiphany 6
+Epiphany 7
+Epiphany 8
+Epiphany 9
 Transfiguration
 Ash Wednesday
 Lent 1
@@ -26,9 +32,6 @@ Easter 5
 Easter 6
 Pentecost
 Trinity Sunday
-Pentecost 2
-Pentecost 3
-...
 Christ the King
 
 

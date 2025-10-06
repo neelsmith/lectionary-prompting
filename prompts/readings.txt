@@ -1,1 +1,45 @@
-I have an HTML document listing readings from the Revised Common Lectionary (RCL) in three columns of a table. Column 1 identifies the day in the liturgical calendar; column 2 identifies the assigned reading from the Psalms; column 3 gives the readings for three selections, the Old Testament, New Testament and Gospel.
+I have an HTML document listing readings from the Revised Common Lectionary (RCL) in three columns of a table. Column 1 identifies the day in the liturgical calendar; column 2 identifies the assigned reading from the Psalms; column 3 gives the readings for three selections, the Old Testament, New Testament and Gospel. I also have a list of names for a selection of Sundays in the liturgical year. I would like for you to create a delimited-text table, using the pipe character '|' as a separator, with one row for each Sunday in the list of names. The table should have 5 columns: the first is the name a give for the Sunday, the second is the assigned readings from the Psalms for that Sunday, third is assigned readings from the Old Testament, fourth is assigned readings from the New Testament, and fifth is assigned reading from the Gospels.
+
+For the liturgical season of Epiphany, the Sundays with labels like "Epiphany 1", "Epiphany 2", etc, are identified in the HTML file with names like "First Sunday After Epiphany", "Second Sunday After Epiphany", etc.
+
+Here is the list of names:
+
+Advent 1
+Advent 2
+Advent 3
+Advent 4
+Christmas
+Christmastide 1
+Christmastide 2
+The Epiphany
+Epiphany 1
+Epiphany 2
+Epiphany 3
+Epiphany 4
+Epiphany 5
+Epiphany 6
+Epiphany 7
+Epiphany 8
+Epiphany 9
+Transfiguration
+Ash Wednesday
+Lent 1
+Lent 2
+Lent 3
+Lent 4
+Lent 5
+Palm Sunday
+Easter
+Easter 1
+Easter 2
+Easter 3
+Easter 4
+Easter 5
+Easter 6
+Pentecost
+Trinity Sunday
+Christ the King
+
+---
+
+
