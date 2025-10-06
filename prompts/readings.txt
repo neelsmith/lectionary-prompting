@@ -1,0 +1,1 @@
+I have an HTML document listing readings from the Revised Common Lectionary (RCL) in three columns of a table. Column 1 identifies the day in the liturgical calendar; column 2 identifies the assigned reading from the Psalms; column 3 gives the readings for three selections, the Old Testament, New Testament and Gospel.
