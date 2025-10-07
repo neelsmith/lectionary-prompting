@@ -1,61 +1,33 @@
 Write a single-page webapp using HTML, CSS and javascript for working with readings from the Revised Common Lectionary (RCL). Always provide a complete single file in your replies to queries.
 
-Start by finding a Sunday date to use: if today is a Sunday, use today's date; otherwise use the date of next Sunday. Determine which lectionary cycle the Sunday date belongs to, that is, A, B, or C. Display the Sunday date and the lectionary cycle. 
+Start by finding a Sunday date to use: if today is a Sunday, use today's date; otherwise use the date of next Sunday. Determine which lectionary cycle the Sunday date belongs to, that is, A, B, or C. Display the Sunday date and the lectionary cycle. Find the calendar dates for the the first and last Sunday in the selected lectionary cycle. Include these in parentheses next to the display of the cycle.
 
----
+Add a one-month view of the calendar. Set it by default to display the month with the current date. Allow the user to navigate the month display forward and backward, and to select a date by clicking on it. When the user changes the displayed month, the label giving the lectionary year (A,B,C) with its beginning and end dates should be updated so that it always includes the currently displayed month.
 
-Now add a date picker to let the user optionally choose a different date to use instead of the default Sunday date.
-
----
-
-Please find the calendar dates for the the first and last Sunday in the selected lectionary cycle. Include these in parentheses next to the display of the cycle.
-
----
-
-Add a one-month view of the calendar. Set it by default to display the month with the date the user selected. Allow the user to navigate the month display forward and backward.
-
----
-
-On the month display, label Christmas Day and Easter if they fall within the displayed dates.
-
----
-
-Now label the four Sundays of Advent on the month display (e.g., "Advent 1", "Advent 2"...). Frame these Sundays with a light purple border (the liturgical color of Advent.)
-
----
-
-Now remove the initial date picker: let the user use only the month display of the calendar to choose a date. Also, frame the date for Christmas Day in the same purple as for Advent Sundays.
+On the month display, label Christmas Day and Easter if they fall within the displayed dates. Label the four Sundays of Advent on the month display (e.g., "Advent 1", "Advent 2"...). Frame these Sundays with a light purple border (the liturgical color of Advent.)
+Frame the date for Christmas Day in the same purple as for Advent Sundays. 
 
 ---
 
 
-On the month display, label Epiphany if it falls within the displayed dates. Label any Sundays between Christmas Day and Epiphany as "Christmastide 1", "Christmastide 2", etc.
 
----
 
-Now label Ash Wednesday on the month display and frame it in black. Label the Sunday before Ash Wednesday "Transfiguration Sunday". Label the Sundays between Epiphany and Ash Wednesday "Epiphany 1", "Epiphany 2", etc., and frame them in a light green, the liturgical color of Epiphany.
 
----
-
-There should be no frame on Transfiguration Sunday.
-Now label the Sundays between Ash Wednesday and Easter as "Lent 1", "Lent 2", etc, and frame them in the same purple as Advent.
+Label Epiphany if it falls within the displayed dates. Label any Sundays between Christmas Day and Epiphany as "Christmastide 1", "Christmastide 2", etc. Label Ash Wednesday on the month display and frame it in black. Label the Sunday before Ash Wednesday "Transfiguration Sunday". Label the Sundays between Epiphany and Ash Wednesday "Epiphany 1", "Epiphany 2", etc., and frame them in a light green, the liturgical color of Epiphany. There should be no frame on Transfiguration Sunday. Label the Sundays between Ash Wednesday and Easter as "Lent 1", "Lent 2", etc, and frame them in the same purple as Advent. Change the label on the Sunday before Easter to "Palm Sunday", and frame it in red, the liturgical color for Palm Sunday. Label Pentecost on the month display, and frame it in red. Label the Sundays between Easter and Pentecost "Easter 1", "Easter 2", etc. Label the Sunday after Pentecost "Trinity Sunday", with no frame. Label the last Sunday before Advent "Christ the King", with no frame. Label the Sundays between Trinity Sunday and Christ the King as "Pentecost 2", "Pentecost 3", etc. (Note that we start with 2 since we've already labeled the first Sunday after Pentecost as Trinity Sunday.) The Sundays labeled "Pentecost 2" etc should be framed in the same green as used for Epiphanytide.
 
 
 ---
-
-When the user changes the displayed month, the label giving the lectionary year (A,B,C) with its beginning and end dates should be updated so that it always includes the currently displayed month.
-
----
-
-Change the label on the Sunday before Easter to "Palm Sunday", and frame it in red, the liturgical color for Palm Sunday.
+No dates are actually labelled except Sunday. Fix that.
 
 ---
 
-Label Pentecost on the month display, and frame it in red. Label the Sundays between Easter and Pentecost "Easter 1", "Easter 2", etc.
 
----
 
-Label the Sunday after Pentecost "Trinity Sunday", with no label. Label the last Sunday before Advent "Christ the King", with no label. Label the Sundays between Trinity Sunday and Christ the King "Pentecost 2", "Pentecost 3", etc. (Note that we start with 2 since we've already labelled the first Sunday after Pentecost as Trinity Sunday.) The Sundays labeled "Pentecost 2" etc should be framed in the same green as used for Epiphanytide.
+
+
+
+
+QUARRY:
 
 ---
 
