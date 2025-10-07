@@ -7,13 +7,37 @@ Add a one-month view of the calendar. Set it by default to display the month wit
 On the month display, label Christmas Day and Easter if they fall within the displayed dates. Label the four Sundays of Advent on the month display (e.g., "Advent 1", "Advent 2"...). Frame these Sundays with a light purple border (the liturgical color of Advent.)
 Frame the date for Christmas Day in the same purple as for Advent Sundays. 
 
+
+---
+
+Label Epiphany if it falls within the displayed dates. Label any Sundays between Christmas Day and Epiphany as "Christmastide 1", "Christmastide 2", etc. 
+
+---
+
+Use black text for all labels on the calendar: use color only to frame the dates when I give you instructions for that.
+
+Label Ash Wednesday on the month display and frame it in black. Label the Sunday before Ash Wednesday "Transfiguration Sunday". Label the Sundays between Epiphany and Ash Wednesday "Epiphany 1", "Epiphany 2", etc., and frame them in a light green, the liturgical color of Epiphany. There should be no frame on Transfiguration Sunday. 
+
+---
+
+You broke everything. Nothing displays.
+---
+
+Good. Label the Sundays between Ash Wednesday and Easter as "Lent 1", "Lent 2", etc, and frame them in the same purple as Advent. Change the label on the Sunday before Easter to "Palm Sunday", and frame it in red, the liturgical color for Palm Sunday. Label Pentecost on the month display, and frame it in red. Label the Sundays between Easter and Pentecost "Easter 1", "Easter 2", etc. 
+
+---
+
+You labelled the Lent Sundays wrong. You started indexing from 0 ("Lent 0") but I told you to start from 1 ("Lent 1"). Fix that.
+
+
+
+
 ---
 
 
 
 
-
-Label Epiphany if it falls within the displayed dates. Label any Sundays between Christmas Day and Epiphany as "Christmastide 1", "Christmastide 2", etc. Label Ash Wednesday on the month display and frame it in black. Label the Sunday before Ash Wednesday "Transfiguration Sunday". Label the Sundays between Epiphany and Ash Wednesday "Epiphany 1", "Epiphany 2", etc., and frame them in a light green, the liturgical color of Epiphany. There should be no frame on Transfiguration Sunday. Label the Sundays between Ash Wednesday and Easter as "Lent 1", "Lent 2", etc, and frame them in the same purple as Advent. Change the label on the Sunday before Easter to "Palm Sunday", and frame it in red, the liturgical color for Palm Sunday. Label Pentecost on the month display, and frame it in red. Label the Sundays between Easter and Pentecost "Easter 1", "Easter 2", etc. Label the Sunday after Pentecost "Trinity Sunday", with no frame. Label the last Sunday before Advent "Christ the King", with no frame. Label the Sundays between Trinity Sunday and Christ the King as "Pentecost 2", "Pentecost 3", etc. (Note that we start with 2 since we've already labeled the first Sunday after Pentecost as Trinity Sunday.) The Sundays labeled "Pentecost 2" etc should be framed in the same green as used for Epiphanytide.
+Label the Sunday after Pentecost "Trinity Sunday", with no frame. Label the last Sunday before Advent "Christ the King", with no frame. Label the Sundays between Trinity Sunday and Christ the King as "Pentecost 2", "Pentecost 3", etc. (Note that we start with 2 since we've already labeled the first Sunday after Pentecost as Trinity Sunday.) The Sundays labeled "Pentecost 2" etc should be framed in the same green as used for Epiphanytide.
 
 
 ---
