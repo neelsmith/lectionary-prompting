@@ -42,3 +42,21 @@ Now let's add user interaction when readings are displayed. If the user clicks o
 ---
 
 Super! Now when the user clicks on a passage reference, modify the display as follows. If the selected passage is from the New Testament or the Gospel, list the passage in 2 parallel columns labelled "Greek" and "Latin". If the selected passage is from the Old Testament or Psalm, list the passage in 3 parallel columns labelled "Greek", "Latin" and "Hebrew".
+---
+
+
+Now in any columns labelled "Latin", we want to display the text of the passage from the Latin Vulgate.
+
+The attached delimited-text file has Biblical texts in Greek, Latin and Hebrew. The file has 2 columns separated by the pipe characater '|'. The first column is an identifier in CTS URN notation.  The second column has the text of the passage identified in the first column.
+
+CTS URNs have 5 components separated by colons. We want to use the 4th and 5th components to find a passage in the Latin Vulgate text of the Bible. If we have a CTS URN "urn:cts:compnov:bible.genesis.vulgate:1.1" we want to look at the fourth component "bible.genesis.vulgate" and the fifth component "1.1".
+
+The fourth component has three parts separated by periods. Its second component identifies the name of a Biblical book in lower case letters. In our example, that is "genesis". The third part identifies a version of the text. In our example, that is "vulgate". 
+
+THe fifth component of the URN is the passage reference, here "1.1". 
+
+Here's a worked example of how to retrieve the text of a reading passage like
+"Luke 2:1-14". This gives us a *range* reference running from Luke 2:1 through Luke 2:14. We want to retrieve the text contents of the entire range. The first URN to match will be "urn:cts:compnov:bible.luke.vulgate:2.1"; we will retrieve its text contents and all subsequent text contents through "urn:cts:compnov:bible.luke.vulgate:2.1".
+
+Please implement this.
+
