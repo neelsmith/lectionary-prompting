@@ -15,3 +15,22 @@ Excellent. Now label Christmas Day and Easter on the month display if they fall 
 Labels are great but I don't see frame colors on the specified dates. Please add a rounded rect framing the days on the calendars I've asked you to highlight: Advent Sundays and Christmas Day, purple frame.
 
 ---
+
+ Now I want to add a new feature. I’m attaching a delimited-text file with assigned readings for liturgical year A. The delimited-text data has 5 columns separated by the pipe character '|', and has a header line. The first column gives the name of the labelled data, 2nd is the assigned Psalms, 3rd is the Old Testament, 4th is the New Testament, and 5th is the Gospel. If the user clicks on a labeled day on the month display in year A, list the assigned readings for the Psalms, Old Testament, New Testament and Gospel for that day. 
+
+---
+
+Great.
+
+Let's change the labelling of the Sundays in the year between Trinity and Christ the King. We will find the Sunday in Pentecost by counting *forward* from Trinity beginning from 2. That is, the first Sunday after Trinity will be "Pentecost 2", the following Sunday will be "Pentecost 3", etc. We will also find the Proper by counting *backwards* from Christ the King. The Sunday before Christ the King is "Proper 28", the preceding Sunday is "Proper 27", etc.  Use the proper identifier to find the reading (e.g., "Proper 28"), but label the calendar with both the Pentecost Sunday *and* the Proper number.
+
+---
+
+Dont' abbreviate calendar labels with ellipses. Put the full label on the calendar.
+--
+
+Great. Let's add the display of assigned readings for all Sundays between Pentecost and Christ the King. For these Sundays, the readings will be listed in the data for Year A by the Proper number. E.g., a Sunday labelled "Pentecost 2/Proper 7" will have readings identified in the data table as "Proper 7".
+
+---
+
+Frame the Sundays for Christ the King and for all the Sundays between Pentecost and Christ the King in green, the liturgical color for the season following Pentecost.
