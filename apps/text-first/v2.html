@@ -1,0 +1,779 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+        :root {
+            --primary-bg: #f8f9fa;
+            --text-color: #212529;
+            --header-bg: #343a40;
+            --header-text: #ffffff;
+            --border-color: #dee2e6;
+            --accent-color: #007bff;
+            --selected-bg: #007bff;
+            --selected-text: #ffffff;
+            --today-bg: #28a745;
+            --today-text: #ffffff;
+            --button-hover: #0056b3;
+            --advent-border: #8A2BE2; /* Light Purple */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8em;
+            color: var(--header-bg);
+        }
+
+        .info-display {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        #selectedDateDisplay {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        #lectionaryCycleDisplay span {
+            font-weight: bold;
+        }
+        
+        .calendar-container {
+            margin-top: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-header h2 {
+            margin: 0;
+            font-size: 1.4em;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .calendar-header button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.2s;
+        }
+
+        .calendar-header button:hover {
+            background-color: var(--button-hover);
+        }
+
+        #calendar {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #calendar th {
+            border: 1px solid var(--border-color);
+            background-color: var(--primary-bg);
+            font-weight: bold;
+            padding: 10px;
+        }
+        
+        #calendar td {
+            border: 1px solid var(--border-color);
+            text-align: center;
+            padding: 5px;
+            height: 60px;
+            width: 14.28%; /* 100% / 7 days */
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            position: relative; /* For label positioning */
+            vertical-align: top;
+        }
+
+        #calendar td:not(.empty):hover {
+            background-color: #e9ecef;
+        }
+        
+        #calendar td.today .day-number {
+            background-color: var(--today-bg);
+            color: var(--today-text);
+        }
+
+        #calendar td.selected .day-number {
+            background-color: var(--selected-bg);
+            color: var(--selected-text);
+        }
+        
+        .day-number {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 0.9em;
+        }
+
+        .special-day-label {
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            font-size: 0.7em;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 2px;
+        }
+        
+        .advent-christmas {
+            border: 2px solid var(--advent-border);
+            box-sizing: border-box; /* Include border in cell size */
+        }
+
+        .empty {
+            background-color: var(--primary-bg);
+            cursor: default;
+        }
+    
+
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revised Common Lectionary Helper</title>
+    <style>
+        :root {
+            --primary-bg: #f8f9fa;
+            --text-color: #212529;
+            --header-bg: #343a40;
+            --header-text: #ffffff;
+            --border-color: #dee2e6;
+            --accent-color: #007bff;
+            --selected-bg: #007bff;
+            --selected-text: #ffffff;
+            --today-bg: #28a745;
+            --today-text: #ffffff;
+            --button-hover: #0056b3;
+            --advent-border: #8A2BE2; /* Light Purple */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8em;
+            color: var(--header-bg);
+        }
+
+        .info-display {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        #selectedDateDisplay {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        #lectionaryCycleDisplay span {
+            font-weight: bold;
+        }
+        
+        .calendar-container {
+            margin-top: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-header h2 {
+            margin: 0;
+            font-size: 1.4em;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .calendar-header button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.2s;
+        }
+
+        .calendar-header button:hover {
+            background-color: var(--button-hover);
+        }
+
+        #calendar {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #calendar th {
+            border: 1px solid var(--border-color);
+            background-color: var(--primary-bg);
+            font-weight: bold;
+            padding: 10px;
+        }
+        
+        #calendar td {
+            border: 1px solid var(--border-color);
+            text-align: center;
+            padding: 5px;
+            height: 60px;
+            width: 14.28%; /* 100% / 7 days */
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            position: relative; /* For label positioning */
+            vertical-align: top;
+        }
+
+        #calendar td:not(.empty):hover {
+            background-color: #e9ecef;
+        }
+        
+        #calendar td.today .day-number {
+            background-color: var(--today-bg);
+            color: var(--today-text);
+        }
+
+        #calendar td.selected .day-number {
+            background-color: var(--selected-bg);
+            color: var(--selected-text);
+        }
+        
+        .day-number {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 0.9em;
+        }
+
+        .special-day-label {
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            font-size: 0.7em;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 2px;
+        }
+        
+        .advent-christmas {
+            border: 2px solid var(--advent-border);
+            box-sizing: border-box; /* Include border in cell size */
+        }
+
+        .empty {
+            background-color: var(--primary-bg);
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Lectionary Calendar</h1>
+        </header>
+
+        <div class="info-display">
+            <p id="selectedDateDisplay"></p>
+            <p id="lectionaryCycleDisplay"></p>
+        </div>
+
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button id="prevMonthBtn">&lt; Prev</button>
+                <h2 id="monthYearDisplay"></h2>
+                <button id="nextMonthBtn">Next &gt;</button>
+            </div>
+            <table id="calendar">
+                <thead>
+                    <tr>
+                        <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- STATE MANAGEMENT ---
+            let selectedDate;
+            let calendarDisplayDate = new Date();
+
+            // --- DOM ELEMENTS ---
+            const selectedDateEl = document.getElementById('selectedDateDisplay');
+            const lectionaryCycleEl = document.getElementById('lectionaryCycleDisplay');
+            const monthYearEl = document.getElementById('monthYearDisplay');
+            const calendarBodyEl = document.getElementById('calendarBody');
+            const prevMonthBtn = document.getElementById('prevMonthBtn');
+            const nextMonthBtn = document.getElementById('nextMonthBtn');
+
+            // --- DATE & LECTIONARY HELPERS ---
+
+            const formatDate = (date) => date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const formatShortDate = (date) => date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+            const findFirstSundayOfAdvent = (year) => {
+                const christmas = new Date(year, 11, 25);
+                const dayOfWeek = christmas.getDay();
+                const sundayBeforeChristmas = new Date(christmas);
+                sundayBeforeChristmas.setDate(christmas.getDate() - dayOfWeek);
+                const firstSunday = new Date(sundayBeforeChristmas);
+                firstSunday.setDate(sundayBeforeChristmas.getDate() - 21);
+                return firstSunday;
+            };
+
+            const getLectionaryCycleInfo = (date) => {
+                const calendarYear = date.getFullYear();
+                const firstSundayOfAdventThisYear = findFirstSundayOfAdvent(calendarYear);
+                let liturgicalYear = (date >= firstSundayOfAdventThisYear) ? calendarYear : calendarYear - 1;
+                const cycleIndex = ((liturgicalYear - 2019) % 3 + 3) % 3;
+                return { cycle: ['A', 'B', 'C'][cycleIndex], year: liturgicalYear };
+            };
+            
+            const getLectionaryYearBoundaries = (liturgicalYear) => {
+                const start = findFirstSundayOfAdvent(liturgicalYear);
+                const nextAdvent = findFirstSundayOfAdvent(liturgicalYear + 1);
+                const end = new Date(nextAdvent);
+                end.setDate(end.getDate() - 1);
+                return { start, end };
+            };
+
+            /**
+             * Calculates the date of Easter for a given year using the Meeus/Jones/Butcher algorithm.
+             * @param {number} year - The year to calculate Easter for.
+             * @returns {Date} The date of Easter Sunday.
+             */
+            const getEaster = (year) => {
+                const a = year % 19;
+                const b = Math.floor(year / 100);
+                const c = year % 100;
+                const d = Math.floor(b / 4);
+                const e = b % 4;
+                const f = Math.floor((b + 8) / 25);
+                const g = Math.floor((b - f + 1) / 3);
+                const h = (19 * a + b - d - g + 15) % 30;
+                const i = Math.floor(c / 4);
+                const k = c % 4;
+                const l = (32 + 2 * e + 2 * i - h - k) % 7;
+                const m = Math.floor((a + 11 * h + 22 * l) / 451);
+                const month = Math.floor((h + l - 7 * m + 114) / 31);
+                const day = ((h + l - 7 * m + 114) % 31) + 1;
+                return new Date(year, month - 1, day); // month is 0-indexed
+            };
+
+            // --- UI RENDERING FUNCTIONS ---
+
+            const renderCalendar = (dateForMonth) => {
+                calendarBodyEl.innerHTML = '';
+                const year = dateForMonth.getFullYear();
+                const month = dateForMonth.getMonth();
+
+                monthYearEl.textContent = dateForMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                // --- Calculate special liturgical days for the year ---
+                const specialDays = new Map();
+                const addSpecialDay = (date, label, className) => {
+                    // Only add if it's in the currently displayed month
+                    if (date.getFullYear() === year && date.getMonth() === month) {
+                        const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+                        specialDays.set(key, { label, className });
+                    }
+                };
+
+                addSpecialDay(getEaster(year), 'Easter', null);
+                addSpecialDay(new Date(year, 11, 25), 'Christmas', 'advent-christmas');
+                
+                const firstAdvent = findFirstSundayOfAdvent(year);
+                for (let i = 0; i < 4; i++) {
+                    const adventSunday = new Date(firstAdvent);
+                    adventSunday.setDate(firstAdvent.getDate() + (i * 7));
+                    addSpecialDay(adventSunday, `Advent ${i + 1}`, 'advent-christmas');
+                }
+                // --- End special day calculation ---
+
+                const firstDayOfMonth = new Date(year, month, 1);
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const startDayOfWeek = firstDayOfMonth.getDay();
+                const today = new Date();
+
+                let currentDate = 1;
+                for (let i = 0; i < 6; i++) {
+                    const row = document.createElement('tr');
+                    for (let j = 0; j < 7; j++) {
+                        const cell = document.createElement('td');
+                        if ((i === 0 && j < startDayOfWeek) || currentDate > daysInMonth) {
+                            cell.classList.add('empty');
+                        } else {
+                            const dayNumber = currentDate; // Capture for event listener
+                            cell.innerHTML = `<span class="day-number">${dayNumber}</span>`;
+                            
+                            const cellDate = new Date(year, month, dayNumber);
+                            const dateKey = `${year}-${month}-${dayNumber}`;
+                            const specialDay = specialDays.get(dateKey);
+
+                            if (specialDay) {
+                                cell.innerHTML += `<span class="special-day-label">${specialDay.label}</span>`;
+                                if (specialDay.className) {
+                                    cell.classList.add(specialDay.className);
+                                }
+                            }
+
+                            if (cellDate.toDateString() === today.toDateString()) {
+                                cell.classList.add('today');
+                            }
+                            if (cellDate.toDateString() === selectedDate.toDateString()) {
+                                cell.classList.add('selected');
+                            }
+                            
+                            cell.addEventListener('click', () => {
+                                selectedDate = new Date(year, month, dayNumber);
+                                updateAllDisplays();
+                            });
+                            
+                            currentDate++;
+                        }
+                        row.appendChild(cell);
+                    }
+                    calendarBodyEl.appendChild(row);
+                    if (currentDate > daysInMonth) break;
+                }
+            };
+            
+            const updateAllDisplays = () => {
+                selectedDateEl.textContent = `Selected Date: ${formatDate(selectedDate)}`;
+                
+                const cycleInfo = getLectionaryCycleInfo(calendarDisplayDate);
+                const boundaries = getLectionaryYearBoundaries(cycleInfo.year);
+                lectionaryCycleEl.innerHTML = `
+                    Lectionary Cycle: <span>${cycleInfo.cycle}</span>
+                    (${formatShortDate(boundaries.start)} - ${formatShortDate(boundaries.end)})
+                `;
+                
+                renderCalendar(calendarDisplayDate);
+            };
+
+            // --- INITIALIZATION AND EVENT LISTENERS ---
+
+            const initialize = () => {
+                let initialSunday = new Date();
+                initialSunday.setHours(0, 0, 0, 0);
+                if (initialSunday.getDay() !== 0) {
+                    initialSunday.setDate(initialSunday.getDate() + (7 - initialSunday.getDay()));
+                }
+                selectedDate = initialSunday;
+                
+                calendarDisplayDate = new Date();
+
+                prevMonthBtn.addEventListener('click', () => {
+                    calendarDisplayDate.setMonth(calendarDisplayDate.getMonth() - 1);
+                    updateAllDisplays();
+                });
+
+                nextMonthBtn.addEventListener('click', () => {
+                    calendarDisplayDate.setMonth(calendarDisplayDate.getMonth() + 1);
+                    updateAllDisplays();
+                });
+                
+                updateAllDisplays();
+            };
+
+            initialize();
+        });
+    </script>
+</body>
+</html>
+
+
+
+							<script>
+                            	
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- STATE MANAGEMENT ---
+            let selectedDate;
+            let calendarDisplayDate = new Date();
+
+            // --- DOM ELEMENTS ---
+            const selectedDateEl = document.getElementById('selectedDateDisplay');
+            const lectionaryCycleEl = document.getElementById('lectionaryCycleDisplay');
+            const monthYearEl = document.getElementById('monthYearDisplay');
+            const calendarBodyEl = document.getElementById('calendarBody');
+            const prevMonthBtn = document.getElementById('prevMonthBtn');
+            const nextMonthBtn = document.getElementById('nextMonthBtn');
+
+            // --- DATE & LECTIONARY HELPERS ---
+
+            const formatDate = (date) => date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const formatShortDate = (date) => date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+            const findFirstSundayOfAdvent = (year) => {
+                const christmas = new Date(year, 11, 25);
+                const dayOfWeek = christmas.getDay();
+                const sundayBeforeChristmas = new Date(christmas);
+                sundayBeforeChristmas.setDate(christmas.getDate() - dayOfWeek);
+                const firstSunday = new Date(sundayBeforeChristmas);
+                firstSunday.setDate(sundayBeforeChristmas.getDate() - 21);
+                return firstSunday;
+            };
+
+            const getLectionaryCycleInfo = (date) => {
+                const calendarYear = date.getFullYear();
+                const firstSundayOfAdventThisYear = findFirstSundayOfAdvent(calendarYear);
+                let liturgicalYear = (date >= firstSundayOfAdventThisYear) ? calendarYear : calendarYear - 1;
+                const cycleIndex = ((liturgicalYear - 2019) % 3 + 3) % 3;
+                return { cycle: ['A', 'B', 'C'][cycleIndex], year: liturgicalYear };
+            };
+            
+            const getLectionaryYearBoundaries = (liturgicalYear) => {
+                const start = findFirstSundayOfAdvent(liturgicalYear);
+                const nextAdvent = findFirstSundayOfAdvent(liturgicalYear + 1);
+                const end = new Date(nextAdvent);
+                end.setDate(end.getDate() - 1);
+                return { start, end };
+            };
+
+            /**
+             * Calculates the date of Easter for a given year using the Meeus/Jones/Butcher algorithm.
+             * @param {number} year - The year to calculate Easter for.
+             * @returns {Date} The date of Easter Sunday.
+             */
+            const getEaster = (year) => {
+                const a = year % 19;
+                const b = Math.floor(year / 100);
+                const c = year % 100;
+                const d = Math.floor(b / 4);
+                const e = b % 4;
+                const f = Math.floor((b + 8) / 25);
+                const g = Math.floor((b - f + 1) / 3);
+                const h = (19 * a + b - d - g + 15) % 30;
+                const i = Math.floor(c / 4);
+                const k = c % 4;
+                const l = (32 + 2 * e + 2 * i - h - k) % 7;
+                const m = Math.floor((a + 11 * h + 22 * l) / 451);
+                const month = Math.floor((h + l - 7 * m + 114) / 31);
+                const day = ((h + l - 7 * m + 114) % 31) + 1;
+                return new Date(year, month - 1, day); // month is 0-indexed
+            };
+
+            // --- UI RENDERING FUNCTIONS ---
+
+            const renderCalendar = (dateForMonth) => {
+                calendarBodyEl.innerHTML = '';
+                const year = dateForMonth.getFullYear();
+                const month = dateForMonth.getMonth();
+
+                monthYearEl.textContent = dateForMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                // --- Calculate special liturgical days for the year ---
+                const specialDays = new Map();
+                const addSpecialDay = (date, label, className) => {
+                    // Only add if it's in the currently displayed month
+                    if (date.getFullYear() === year && date.getMonth() === month) {
+                        const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+                        specialDays.set(key, { label, className });
+                    }
+                };
+
+                addSpecialDay(getEaster(year), 'Easter', null);
+                addSpecialDay(new Date(year, 11, 25), 'Christmas', 'advent-christmas');
+                
+                const firstAdvent = findFirstSundayOfAdvent(year);
+                for (let i = 0; i < 4; i++) {
+                    const adventSunday = new Date(firstAdvent);
+                    adventSunday.setDate(firstAdvent.getDate() + (i * 7));
+                    addSpecialDay(adventSunday, `Advent ${i + 1}`, 'advent-christmas');
+                }
+                // --- End special day calculation ---
+
+                const firstDayOfMonth = new Date(year, month, 1);
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const startDayOfWeek = firstDayOfMonth.getDay();
+                const today = new Date();
+
+                let currentDate = 1;
+                for (let i = 0; i < 6; i++) {
+                    const row = document.createElement('tr');
+                    for (let j = 0; j < 7; j++) {
+                        const cell = document.createElement('td');
+                        if ((i === 0 && j < startDayOfWeek) || currentDate > daysInMonth) {
+                            cell.classList.add('empty');
+                        } else {
+                            const dayNumber = currentDate; // Capture for event listener
+                            cell.innerHTML = `<span class="day-number">${dayNumber}</span>`;
+                            
+                            const cellDate = new Date(year, month, dayNumber);
+                            const dateKey = `${year}-${month}-${dayNumber}`;
+                            const specialDay = specialDays.get(dateKey);
+
+                            if (specialDay) {
+                                cell.innerHTML += `<span class="special-day-label">${specialDay.label}</span>`;
+                                if (specialDay.className) {
+                                    cell.classList.add(specialDay.className);
+                                }
+                            }
+
+                            if (cellDate.toDateString() === today.toDateString()) {
+                                cell.classList.add('today');
+                            }
+                            if (cellDate.toDateString() === selectedDate.toDateString()) {
+                                cell.classList.add('selected');
+                            }
+                            
+                            cell.addEventListener('click', () => {
+                                selectedDate = new Date(year, month, dayNumber);
+                                updateAllDisplays();
+                            });
+                            
+                            currentDate++;
+                        }
+                        row.appendChild(cell);
+                    }
+                    calendarBodyEl.appendChild(row);
+                    if (currentDate > daysInMonth) break;
+                }
+            };
+            
+            const updateAllDisplays = () => {
+                selectedDateEl.textContent = `Selected Date: ${formatDate(selectedDate)}`;
+                
+                const cycleInfo = getLectionaryCycleInfo(calendarDisplayDate);
+                const boundaries = getLectionaryYearBoundaries(cycleInfo.year);
+                lectionaryCycleEl.innerHTML = `
+                    Lectionary Cycle: <span>${cycleInfo.cycle}</span>
+                    (${formatShortDate(boundaries.start)} - ${formatShortDate(boundaries.end)})
+                `;
+                
+                renderCalendar(calendarDisplayDate);
+            };
+
+            // --- INITIALIZATION AND EVENT LISTENERS ---
+
+            const initialize = () => {
+                let initialSunday = new Date();
+                initialSunday.setHours(0, 0, 0, 0);
+                if (initialSunday.getDay() !== 0) {
+                    initialSunday.setDate(initialSunday.getDate() + (7 - initialSunday.getDay()));
+                }
+                selectedDate = initialSunday;
+                
+                calendarDisplayDate = new Date();
+
+                prevMonthBtn.addEventListener('click', () => {
+                    calendarDisplayDate.setMonth(calendarDisplayDate.getMonth() - 1);
+                    updateAllDisplays();
+                });
+
+                nextMonthBtn.addEventListener('click', () => {
+                    calendarDisplayDate.setMonth(calendarDisplayDate.getMonth() + 1);
+                    updateAllDisplays();
+                });
+                
+                updateAllDisplays();
+            };
+
+            initialize();
+        });
+    
+
+							</script>
+                        </body>
+                        </html>
+                    

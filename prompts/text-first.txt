@@ -1,0 +1,17 @@
+Write a single-page webapp using HTML, CSS and javascript for working with readings from the Revised Common Lectionary (RCL). Always provide a complete single file in your replies to my queries.
+
+Start by finding a Sunday date to use: if today is a Sunday, use today's date; otherwise use the date of next Sunday. Determine which lectionary cycle the Sunday date belongs to, that is, A, B, or C. Display the Sunday date and the lectionary cycle. Find the calendar dates for the the first and last Sunday in the selected lectionary cycle. Include these in parentheses next to the display of the cycle.
+
+Add a one-month view of the calendar. Set it by default to display the month with the current date. Allow the user to navigate the month display forward and backward, and to select a date by clicking on it. When the user changes the displayed month, the label giving the lectionary year (A,B,C) with its beginning and end dates should be updated so that it always includes the currently displayed month.
+
+
+---
+
+
+Excellent. Now label Christmas Day and Easter on the month display if they fall within the displayed month. Likewise label the four Sundays preceding Christmas Day as "Advent 1", "Advent 2", etc., if they any of them fall within the displayed month. Frame the dates for the Advent Sundays and the date for Christmas Day with a light purple border (the liturgical color of Advent.)
+
+---
+
+Labels are great but I don't see frame colors on the specified dates. Please add a rounded rect framing the days on the calendars I've asked you to highlight: Advent Sundays and Christmas Day, purple frame.
+
+---
