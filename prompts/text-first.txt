@@ -38,3 +38,7 @@ Frame the Sundays for Christ the King and for all the Sundays between Pentecost 
 ---
 
 Now let's add user interaction when readings are displayed. If the user clicks on one of the passage references, add a text area below that lists the passage clicked on. Note that an assigned reading might be a single passage like "Titus 2:11-14", but could also list alternatives with "or". For example, if the assigned Psalm is "96 or 96:1-4,11-12" that means *either* Psalm 96 *or* Psalm 96:1-4. The two passages should be individually selectable.  In addition, references in parentheses are optional expansions of the assigned passage. "Luke 2:1-14(15-20)" means *either* Luke 2:1-14 *or* Luke 2:1-14 PLUS Luke 2:15-20. These should options should also be individually selectable.
+
+---
+
+Super! Now when the user clicks on a passage reference, modify the display as follows. If the selected passage is from the New Testament or the Gospel, list the passage in 2 parallel columns labelled "Greek" and "Latin". If the selected passage is from the Old Testament or Psalm, list the passage in 3 parallel columns labelled "Greek", "Latin" and "Hebrew".
