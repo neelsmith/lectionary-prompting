@@ -1,0 +1,766 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+        :root {
+            --primary-bg: #f8f9fa;
+            --text-color: #212529;
+            --header-bg: #343a40;
+            --border-color: #dee2e6;
+            --accent-color: #007bff;
+            --selected-bg: #007bff;
+            --selected-text: #ffffff;
+            --today-bg: #28a745;
+            --today-text: #ffffff;
+            --button-hover: #0056b3;
+            --advent-border: #8A2BE2;
+            --pentecost-border: #28a745;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        h1 { margin: 0; font-size: 1.8em; color: var(--header-bg); }
+
+        .info-display {
+            text-align: center; margin-bottom: 25px;
+            font-size: 1.1em; line-height: 1.6;
+        }
+        
+        #lectionaryCycleDisplay span { font-weight: bold; }
+        
+        .calendar-container { margin-top: 20px; }
+
+        .calendar-header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 15px;
+        }
+
+        .calendar-header h2 { margin: 0; font-size: 1.4em; }
+
+        .calendar-header button {
+            background-color: var(--accent-color); color: white; border: none;
+            padding: 8px 16px; border-radius: 5px; cursor: pointer;
+            font-size: 1em; transition: background-color 0.2s;
+        }
+
+        .calendar-header button:hover { background-color: var(--button-hover); }
+
+        #calendar { width: 100%; border-collapse: collapse; }
+
+        #calendar th {
+            border: 1px solid var(--border-color); background-color: var(--primary-bg);
+            font-weight: bold; padding: 10px;
+        }
+        
+        #calendar td {
+            border: 1px solid var(--border-color); text-align: center;
+            padding: 4px; height: 75px; width: 14.28%;
+            cursor: pointer; transition: background-color 0.2s; vertical-align: top;
+        }
+
+        #calendar td:not(.empty):hover { background-color: #e9ecef; }
+        
+        .day-number {
+            display: inline-flex; justify-content: center; align-items: center;
+            width: 28px; height: 28px; border-radius: 50%;
+            font-size: 0.9em; box-sizing: border-box; margin-bottom: 2px;
+        }
+
+        #calendar td.today .day-number { background-color: var(--today-bg); color: var(--today-text); }
+        #calendar td.selected .day-number { background-color: var(--selected-bg); color: var(--selected-text); }
+        .advent-christmas .day-number { border: 2px solid var(--advent-border); }
+        .season-after-pentecost .day-number { border: 2px solid var(--pentecost-border); }
+
+        .special-day-label {
+            font-size: 0.65em; font-weight: bold; color: var(--accent-color);
+            text-align: center; padding: 0 2px; white-space: normal; line-height: 1.1;
+        }
+        
+        .empty { background-color: var(--primary-bg); cursor: default; }
+
+        .readings-container, .passage-container {
+            margin-top: 25px; padding-top: 20px;
+            border-top: 1px solid var(--border-color); line-height: 1.6;
+        }
+        .readings-container h3, .passage-container h3 { margin-top: 0; color: var(--header-bg); }
+        .readings-list p { margin: 5px 0; }
+        .hidden { display: none; }
+        
+        .passage-link {
+            color: var(--accent-color); text-decoration: none; cursor: pointer;
+        }
+        .passage-link:hover { text-decoration: underline; }
+
+        #passageColumns {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .passage-column {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: #fcfcfc;
+        }
+        .passage-column h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9em;
+            text-align: center;
+            color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+        .passage-column p {
+            margin: 0;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+    
+
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revised Common Lectionary Helper</title>
+    <style>
+        :root {
+            --primary-bg: #f8f9fa;
+            --text-color: #212529;
+            --header-bg: #343a40;
+            --border-color: #dee2e6;
+            --accent-color: #007bff;
+            --selected-bg: #007bff;
+            --selected-text: #ffffff;
+            --today-bg: #28a745;
+            --today-text: #ffffff;
+            --button-hover: #0056b3;
+            --advent-border: #8A2BE2;
+            --pentecost-border: #28a745;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        h1 { margin: 0; font-size: 1.8em; color: var(--header-bg); }
+
+        .info-display {
+            text-align: center; margin-bottom: 25px;
+            font-size: 1.1em; line-height: 1.6;
+        }
+        
+        #lectionaryCycleDisplay span { font-weight: bold; }
+        
+        .calendar-container { margin-top: 20px; }
+
+        .calendar-header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 15px;
+        }
+
+        .calendar-header h2 { margin: 0; font-size: 1.4em; }
+
+        .calendar-header button {
+            background-color: var(--accent-color); color: white; border: none;
+            padding: 8px 16px; border-radius: 5px; cursor: pointer;
+            font-size: 1em; transition: background-color 0.2s;
+        }
+
+        .calendar-header button:hover { background-color: var(--button-hover); }
+
+        #calendar { width: 100%; border-collapse: collapse; }
+
+        #calendar th {
+            border: 1px solid var(--border-color); background-color: var(--primary-bg);
+            font-weight: bold; padding: 10px;
+        }
+        
+        #calendar td {
+            border: 1px solid var(--border-color); text-align: center;
+            padding: 4px; height: 75px; width: 14.28%;
+            cursor: pointer; transition: background-color 0.2s; vertical-align: top;
+        }
+
+        #calendar td:not(.empty):hover { background-color: #e9ecef; }
+        
+        .day-number {
+            display: inline-flex; justify-content: center; align-items: center;
+            width: 28px; height: 28px; border-radius: 50%;
+            font-size: 0.9em; box-sizing: border-box; margin-bottom: 2px;
+        }
+
+        #calendar td.today .day-number { background-color: var(--today-bg); color: var(--today-text); }
+        #calendar td.selected .day-number { background-color: var(--selected-bg); color: var(--selected-text); }
+        .advent-christmas .day-number { border: 2px solid var(--advent-border); }
+        .season-after-pentecost .day-number { border: 2px solid var(--pentecost-border); }
+
+        .special-day-label {
+            font-size: 0.65em; font-weight: bold; color: var(--accent-color);
+            text-align: center; padding: 0 2px; white-space: normal; line-height: 1.1;
+        }
+        
+        .empty { background-color: var(--primary-bg); cursor: default; }
+
+        .readings-container, .passage-container {
+            margin-top: 25px; padding-top: 20px;
+            border-top: 1px solid var(--border-color); line-height: 1.6;
+        }
+        .readings-container h3, .passage-container h3 { margin-top: 0; color: var(--header-bg); }
+        .readings-list p { margin: 5px 0; }
+        .hidden { display: none; }
+        
+        .passage-link {
+            color: var(--accent-color); text-decoration: none; cursor: pointer;
+        }
+        .passage-link:hover { text-decoration: underline; }
+
+        #passageColumns {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .passage-column {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: #fcfcfc;
+        }
+        .passage-column h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9em;
+            text-align: center;
+            color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+        .passage-column p {
+            margin: 0;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Lectionary Calendar</h1>
+        </header>
+
+        <div class="info-display">
+            <p id="selectedDateDisplay"></p>
+            <p id="lectionaryCycleDisplay"></p>
+        </div>
+
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button id="prevMonthBtn">&lt; Prev</button>
+                <h2 id="monthYearDisplay"></h2>
+                <button id="nextMonthBtn">Next &gt;</button>
+            </div>
+            <table id="calendar">
+                <thead>
+                    <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                </thead>
+                <tbody id="calendarBody"></tbody>
+            </table>
+        </div>
+
+        <div id="readingsDisplayContainer" class="readings-container hidden">
+            <h3>Readings for <span id="readingDayLabel"></span></h3>
+            <div class="readings-list">
+                <p><strong>Psalms:</strong> <span id="psalmsReading"></span></p>
+                <p><strong>Old Testament:</strong> <span id="otReading"></span></p>
+                <p><strong>New Testament:</strong> <span id="ntReading"></span></p>
+                <p><strong>Gospel:</strong> <span id="gospelReading"></span></p>
+            </div>
+        </div>
+
+        <div id="passageDisplayContainer" class="passage-container hidden">
+            <h3>Passage: <span id="passageReference"></span></h3>
+            <div id="passageColumns"></div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- DATA ---
+            const RCL_A_DATA = `Feast|Psalm|OT|NT|Gospel
+Advent 1|122|Isaiah 2:1-5|Romans 13:8-14|Matthew 24:37-44
+Advent 2|72 or 72:1-8|Isaiah 11:1-10|Romans 15:4-13|Matthew 3:1-12
+Advent 3|146 or 146:4-9|Isaiah 35:1-10|James 5:7-10|Matthew 11:2-11
+Advent 4|24 or 24:1-7|Isaiah 7:10-17|Romans 1:1-7|Matthew 1:18-25
+Christmas|96 or 96:1-4,11-12|Isaiah 9:2-4,6-7|Titus 2:11-14|Luke 2:1-14(15-20)
+Christmastide 1|147 or 147:13-21|Isaiah 61:10-62:3|Galatians 3:23-25: 4:4-7|John 1:1-18
+Christmastide 2|84 or 84:1-8|Jeremiah 31:7-14|Ephesians 1:3-6,15-19a|Matthew 2:13-15,19-23 or Luke 2:41-52
+Epiphany|72 or 72:1-2,10-17|Isaiah 60:1-6,9|Ephesians 3:1-12|Matthew 2:1-12
+Epiphany 1|40:1-12 or 40:1-11|Isaiah 49:1-7|1 Corinthians 1:1-9|John 1:29-41
+Epiphany 2|63:1-8|Isaiah 49:8-16a|1 Corinthians 1:10-17|John 2:1-11
+Epiphany 3|27 or 27:1-9|Isaiah 9:1-4|1 Corinthians 1:18-25(26-31)|Matthew 4:12-23
+Epiphany 4|15 or Canticle 18 or 19|Micah 6:1-8|1 Corinthians 2:1-11(12-16)|Matthew 5:1-12
+Epiphany 5|112|Isaiah 58:5-12|1 Corinthians 3:1-9|Matthew 5:13-20
+Epiphany 6|119:1-16 or 119:1-8|Deuteronomy 30:15-20|1 Corinthians 3:10-11,16-23|Matthew 5:21-24(25-26)27-37
+Epiphany 7|99|Leviticus 19:1-2,9-18|1 Corinthians 4:1-5(6-7)8-13|Matthew 5:38-48
+Transfiguration|99|Exodus 24:12(13-14)15-18|Philippians 3:7-14|Matthew 17:1-9
+Ash Wednesday|103 or 103:8-14|Joel 2:1-2,12-17 or Isaiah 58:1-12|2 Corinthians 5:20b-6:10|Matthew 6:1-6,16-21
+Lent 1|51 or 51:1-13|Genesis 2:4b-9,15-17,25-3:7|Romans 5:12-19(20-21)|Matthew 4:1-11
+Lent 2|33:12-22|Genesis 12:1-8|Romans 4:1-5(6-12)13-17|John 3:1-17
+Lent 3|95 or 95:6-11|Exodus 17:1-7|Romans 5:1-11|John 4:5-26(27-38)39-42
+Lent 4|23|1 Samuel 16:1-13|Ephesians 5:(1-7)8-14|John 9:1-13(14-27)28-38
+Lent 5|130|Ezekiel 37:1-3(4-10)11-14|Romans 6:16-23|John 11:(1-17)18-44
+Palm Sunday|22:1-21 or 22:1-11|Isaiah 45:21-25 or Isaiah 52:13-53:12|Philippians 2:5-11|Matthew (26:36-75) 27:1-54(55-66)
+Easter|118:14-17,22-24 or 118:14-24|Acts 10:34-43 or Exodus 14:10-14,21-25; 15:20-21|Colossians 3:1-4 or Acts 10:34-43|John 20:1-10(11-18) or Matthew 28:1-10
+Easter 1|111 or 118:19-24|Acts 2:14a,22-32 or Genesis 8:6-16; 9:8-16|1 Peter 1:3-9 or Acts 2:14a,22-32|John 20:19-31
+Easter 2|116 or 116:10-17|Acts 2:14a,36-47 or Isaiah 43:1-12|1 Peter 1:17-23 or Acts 2:14a,36-47|Luke 24:13-35
+Easter 3|23|Acts 6:1-9; 7:2a,51-60 or Nehemiah 9:6-15|1 Peter 2:19-25 or Acts 6:1-9; 7:2a,51-60|John 10:1-10
+Easter 4|66:1-11 or 66:1-8|Acts 17:1-15 or Deuteronomy 6:20-25|1 Peter 2:1-10 or Acts 17:1-15|John 14:1-14
+Easter 5|148 or 148:7-14|Acts 17:22-31 or Isaiah 41:17-20|1 Peter 3:8-18 or Acts 17:22-31|John 15:1-8
+Easter 6|68:1-20 or 47|Acts 1:(1-7)8-14 or Ezekiel 39:21-29|1 Peter 4:12-19 or Acts 1:(1-7)8-14|John 17:1-11
+Pentecost|104:25-37 or 104:24-32 or 33:12-15,18-22|Acts 2:1-11 or Numbers 11:24-30|1 Corinthians 12:4-13 or Acts 2:1-11|John 20:19-23 or John 7:37-39a
+Trinity Sunday|Canticle 2 or 13|Genesis 1:1-2:3|2 Corinthians 13:(5-10)11-13|Matthew 28:16-20
+Christ the King|95 or 95:1-7|Ezekiel 34:11-17|1 Corinthians 15:20-28|Matthew 25:31-46
+Proper 1|119:1-16 or 119:9-16|Ecclesiasticus 15:11-20|1 Corinthians 3:1-9|Matthew 5:21-24,27-30,33-37
+Proper 2|71 or 71:16-24|Leviticus 19:1-2,9-18|1 Corinthians 3:10-11,16-23|Matthew 5:38-48
+Proper 3|62 or 62:6-14|Isaiah 49:8-18|1 Corinthians 4:1-5(6-7)8-13|Matthew 6:24-34
+Proper 4|31 or 31:1-5,19-24|Deuteronomy 11:18-21,26-28|Romans 3:21-25a,28|Matthew 7:21-27
+Proper 5|50 or 50:7-15|Hosea 5:15-6:6|Romans 4:13-18|Matthew 9:9-13
+Proper 6|100|Exodus 19:2-8a|Romans 5:6-11|Matthew 9:35-10:8(9-15)
+Proper 7|69:1-18 or 69:7-10,16-18|Jeremiah 20:7-13|Romans 5:15b-19|Matthew 10:(16-23)24-33
+Proper 8|89:1-18 or 89:1-4,15-18|Isaiah 2:10-17|Romans 6:3-11|Matthew 10:34-42
+Proper 9|145 or 145:8-14|Zechariah 9:9-12|Romans 7:21-8:6|Matthew 11:25-30
+Proper 10|65 or 65:9-14|Isaiah 55:1-5,10-13|Romans 8:9-17|Matthew 13:1-9,18-23
+Proper 11|86 or 86:11-17|Wisdom 12:13,16-19|Romans 8:18-25|Matthew 13:24-30,36-43
+Proper 12|119:121-136 or 119:129-136|1 Kings 3:5-12|Romans 8:26-34|Matthew 13:31-33,44-49a
+Proper 13|78:1-29 or 78:14-20,23-25|Nehemiah 9:16-20|Romans 8:35-39|Matthew 14:13-21
+Proper 14|29|Jonah 2:1-9|Romans 9:1-5|Matthew 14:22-33
+Proper 15|67|Isaiah 56:1(2-5)6-7|Romans 11:13-15,29-32|Matthew 15:21-28
+Proper 16|138|Isaiah 51:1-6|Romans 11:33-36|Matthew 16:13-20
+Proper 17|26 or 26:1-8|Jeremiah 15:15-21|Romans 12:1-8|Matthew 16:21-27
+Proper 18|119:33-48 or 119:33-40|Ezekiel 33:(1-6)7-11|Romans 12:9-21|Matthew 18:15-20
+Proper 19|103 or 103:8-13|Ecclesiasticus 27:30-28:7|Romans 14:5-12|Matthew 18:21-35
+Proper 20|145 or 145:1-8|Jonah 3:10-4:11|Philippians 1:21-27|Matthew 20:1-16
+Proper 21|25:1-14 or 25:3-9|Ezekiel 18:1-4,25-32|Philippians 2:1-13|Matthew 21:28-32
+Proper 22|80 or 80:7-14|Isaiah 5:1-7|Philippians 3:14-21|Matthew 21:33-43
+Proper 23|23|Isaiah 25:1-9|Philippians 4:4-13|Matthew 22:1-14
+Proper 24|96 or 96:1-9|Isaiah 45:1-7|1 Thessalonians 1:1-10|Matthew 22:15-22
+Proper 25|1|Exodus 22:21-27|1 Thessalonians 2:1-8|Matthew 22:34-46
+Proper 26|43|Micah 3:5-12|1 Thessalonians 2:9-13,17-20|Matthew 23:1-12
+Proper 27|70|Amos 5:18-24|1 Thessalonians 4:13-18|Matthew 25:1-13
+Proper 28|90 or 90:1-8,12|Zephaniah 1:7,12-18|1 Thessalonians 5:1-10|Matthew 25:14-15,19-29
+Proper 29|95:1-7|Ezekiel 34:11-17|1 Corinthians 15:20-28|Matthew 25:31-46`;
+            
+            const VULGATE_DATA = `urn:cts:compnov:bible.genesis.vulgate:1.1|In principio creavit Deus caelum et terram.
+urn:cts:compnov:bible.genesis.vulgate:1.2|Terra autem erat inanis et vacua, et tenebrae erant super faciem abyssi: et spiritus Dei ferebatur super aquas.
+urn:cts:compnov:bible.genesis.vulgate:1.3|Dixitque Deus: Fiat lux. Et facta est lux.
+urn:cts:compnov:bible.genesis.vulgate:1.4|Et vidit Deus lucem quod esset bona: et divisit lucem a tenebris.
+urn:cts:compnov:bible.genesis.vulgate:1.5|Appellavitque lucem Diem, et tenebras Noctem: factumque est vespere et mane, dies unus.
+urn:cts:compnov:bible.genesis.vulgate:1.6|Dixit quoque Deus: Fiat firmamentum in medio aquarum: et dividat aquas ab aquis.
+urn:cts:compnov:bible.genesis.vulgate:1.7|Et fecit Deus firmamentum, divisitque aquas, quae erant sub firmamento, ab his, quae erant super firmamentum. Et factum est ita.
+urn:cts:compnov:bible.genesis.vulgate:1.8|Vocavitque Deus firmamentum, Caelum: et factum est vespere et mane, dies secundus.
+urn:cts:compnov:bible.genesis.vulgate:1.9|Dixit vero Deus: Congregentur aquae, quae sub caelo sunt, in locum unum: et appareat arida. Et factum est ita.
+urn:cts:compnov:bible.genesis.vulgate:1.10|Et vocavit Deus aridam Terram, congregationesque aquarum appellavit Maria. Et vidit Deus quod esset bonum.
+urn:cts:compnov:bible.psalms.vulgate:50.12|Cor mundum crea in me, Deus, et spiritum rectum innova in visceribus meis.
+urn:cts:compnov:bible.psalms.vulgate:50.13|Ne projicias me a facie tua, et spiritum sanctum tuum ne auferas a me.
+urn:cts:compnov:bible.psalms.vulgate:50.14|Redde mihi laetitiam salutaris tui, et spiritu principali confirma me.
+urn:cts:compnov:bible.psalms.vulgate:50.15|Docebo iniquos vias tuas, et impii ad te convertentur.
+urn:cts:compnov:bible.psalms.vulgate:50.16|Libera me de sanguinibus, Deus, Deus salutis meae, et exsultabit lingua mea justitiam tuam.
+urn:cts:compnov:bible.psalms.vulgate:50.17|Domine, labia mea aperies, et os meum annuntiabit laudem tuam.
+urn:cts:compnov:bible.psalms.vulgate:50.18|Quoniam si voluisses sacrificium, dedissem utique; holocaustis non delectaberis.
+urn:cts:compnov:bible.psalms.vulgate:50.19|Sacrificium Deo spiritus contribulatus; cor contritum et humiliatum, Deus, non despicies.
+urn:cts:compnov:bible.psalms.vulgate:50.20|Benigne fac, Domine, in bona voluntate tua Sion, ut aedificentur muri Jerusalem.
+urn:cts:compnov:bible.psalms.vulgate:50.21|Tunc acceptabis sacrificium justitiae, oblationes et holocausta; tunc imponent super altare tuum vitulos.]
+urn:cts:compnov:bible.psalms.vulgate:51.1|In finem. Intellectus David,
+urn:cts:compnov:bible.psalms.vulgate:51.2|cum venit Doëg Idumaeus, et nuntiavit Sauli: Venit David in domum Achimelech.
+urn:cts:compnov:bible.deuteronomy.vulgate:1.1|Haec sunt verba quae locutus est Moyses ad omnem Israël trans Jordanem in solitudine campestri, contra mare Rubrum, inter Pharan et Tophel et Laban et Haseroth, ubi auri est plurimum:
+urn:cts:compnov:bible.deuteronomy.vulgate:1.2|undecim diebus de Horeb per viam montis Seir usque ad Cadesbarne.`;
+
+            // --- STATE & DATA ---
+            let selectedDate, calendarDisplayDate, lectionaryDataA, vulgateMap;
+            const specialDaysCache = new Map();
+            const BOOK_NAME_MAP = {
+                'Genesis': 'genesis', 'Exodus': 'exodus', 'Leviticus': 'leviticus', 'Numbers': 'numbers', 'Deuteronomy': 'deuteronomy',
+                '1 Samuel': '1samuel', '2 Samuel': '2samuel', '1 Kings': '1kings', '2 Kings': '2kings', 'Isaiah': 'isaiah', 'Jeremiah': 'jeremiah',
+                'Ezekiel': 'ezekiel', 'Hosea': 'hosea', 'Joel': 'joel', 'Amos': 'amos', 'Jonah': 'jonah', 'Micah': 'micah',
+                'Zephaniah': 'zephaniah', 'Zechariah': 'zechariah', 'Nehemiah': 'nehemiah', 'Psalm': 'psalms', 'Psalms': 'psalms',
+                'Wisdom': 'wisdom', 'Ecclesiasticus': 'sirach',
+                'Matthew': 'matthew', 'Mark': 'mark', 'Luke': 'luke', 'John': 'john', 'Acts': 'acts',
+                'Romans': 'romans', '1 Corinthians': '1corinthians', '2 Corinthians': '2corinthians', 'Galatians': 'galatians',
+                'Ephesians': 'ephesians', 'Philippians': 'philippians', 'Colossians': 'colossians', '1 Thessalonians': '1thessalonians',
+                '2 Thessalonians': '2thessalonians', 'Titus': 'titus', 'Hebrews': 'hebrews', 'James': 'james',
+                '1 Peter': '1peter', '2 Peter': '2peter'
+            };
+
+            // --- DOM ELEMENTS ---
+            const dom = { selectedDate: document.getElementById('selectedDateDisplay'), lectionaryCycle: document.getElementById('lectionaryCycleDisplay'), monthYear: document.getElementById('monthYearDisplay'), calendarBody: document.getElementById('calendarBody'), prevMonthBtn: document.getElementById('prevMonthBtn'), nextMonthBtn: document.getElementById('nextMonthBtn'), readingsContainer: document.getElementById('readingsDisplayContainer'), readingDayLabel: document.getElementById('readingDayLabel'), psalmsReading: document.getElementById('psalmsReading'), otReading: document.getElementById('otReading'), ntReading: document.getElementById('ntReading'), gospelReading: document.getElementById('gospelReading'), passageContainer: document.getElementById('passageDisplayContainer'), passageReference: document.getElementById('passageReference'), passageColumns: document.getElementById('passageColumns') };
+
+            // --- PARSING & HELPERS ---
+            const parseLectionaryData = t => { const m=new Map();t.trim().split('\n').slice(1).forEach(r=>{const p=r.split('|').map(s=>s.trim());if(p.length===5&&p[0]){const[l,ps,ot,nt,g]=p;m.set(l,{psalms:ps,ot:ot,nt:nt,gospel:g});if(l==="Proper 29")m.set("Christ the King",{psalms:ps,ot:ot,nt:nt,gospel:g});}});return m; };
+            const parseVulgateData = t => { const m=new Map();t.trim().split('\n').forEach(r=>{const p=r.split('|',2);if(p.length===2&&p[0])m.set(p[0],p[1]);});return m;};
+            const parsePassageString = s => { const f=new Set();s.split(/\s+or\s+/).forEach(p=>{const m=p.match(/(.+?)\s*\((.+?)\)/);if(m){const b=m[1].trim(),e=m[2].trim();f.add(b);f.add(`${b},${e}`);}else{f.add(p.trim());}});return Array.from(f);};
+            const addDays = (d,days) => {const r=new Date(d);r.setDate(r.getDate()+days);return r;};
+            const getNextSunday = d => {const r=new Date(d);r.setDate(d.getDate()+(7-d.getDay())%7);return r;};
+            const formatDate = d => d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+            const formatShortDate = d => d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+            const findFirstSundayOfAdvent = y => {const c=new Date(y,11,25);c.setDate(c.getDate()-c.getDay());return addDays(c,-21);};
+            const getLectionaryCycleInfo=d=>{const y=d.getFullYear(),a=findFirstSundayOfAdvent(y);let lY=(d>=a)?y:y-1;return{cycle:['A','B','C'][((lY-2019)%3+3)%3],year:lY};};
+            const getLectionaryYearBoundaries=lY=>({start:findFirstSundayOfAdvent(lY),end:addDays(findFirstSundayOfAdvent(lY+1),-1)});
+            const getEaster=y=>{const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),month=Math.floor((h+l-7*m+114)/31),day=((h+l-7*m+114)%31)+1;return new Date(y,month-1,day);};
+            const getSpecialDaysForYear=y=>{if(specialDaysCache.has(y))return specialDaysCache.get(y);const sD=new Map();const add=(d,dL,o={})=>{const{lookupLabel:lL=dL,className:cN=null}=o;const k=`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;sD.set(k,{displayLabel:dL,lookupLabel:lL,className:cN});};const e=getEaster(y),fA=findFirstSundayOfAdvent(y),c=new Date(y,11,25);for(let i=0;i<4;i++)add(addDays(fA,i*7),`Advent ${i+1}`,{className:'advent-christmas'});add(c,'Christmas',{className:'advent-christmas'});add(getNextSunday(c),'Christmastide 1');const sS=getNextSunday(addDays(c,7));if(sS<new Date(y+1,0,6))add(sS,'Christmastide 2');const ep=new Date(y,0,6);add(ep,'Epiphany');let cS=getNextSunday(ep);const aW=addDays(e,-46);for(let i=1;i<=8;i++){if(addDays(cS,7)>aW){add(cS,'Transfiguration');break;}add(cS,`Epiphany ${i}`);cS=addDays(cS,7);}
+            add(aW,'Ash Wednesday');cS=getNextSunday(aW);for(let i=1;i<=5;i++){add(cS,`Lent ${i}`);cS=addDays(cS,7);}
+            add(cS,'Palm Sunday');add(e,'Easter');for(let i=1;i<=6;i++)add(addDays(e,i*7),`Easter ${i}`);const p=addDays(e,49);add(p,'Pentecost');const tS=addDays(p,7);add(tS,'Trinity Sunday',{className:'season-after-pentecost'});const cK=addDays(findFirstSundayOfAdvent(y),-7);cS=addDays(tS,7);while(cS<cK){const pN=Math.round((cS-tS)/6048e5)+1,prN=29-Math.round((cK-cS)/6048e5),lL=`Proper ${prN}`,dL=`Pentecost ${pN} / ${lL}`;add(cS,dL,{lookupLabel:lL,className:'season-after-pentecost'});cS=addDays(cS,7);}
+            add(cK,'Christ the King',{className:'season-after-pentecost'});specialDaysCache.set(y,sD);return sD;};
+
+            // --- TEXT RETRIEVAL ---
+            const getVulgateText = (passageRef) => {
+                const lastSpaceIndex = passageRef.lastIndexOf(' ');
+                if (lastSpaceIndex === -1 && !passageRef.includes(':')) { // Handle Psalm 96 case without space
+                     const bookName = passageRef.replace(/\d+/g, '').trim(); // "Psalm"
+                     const refPart = passageRef.replace(/\D+/g, '').trim(); // "96"
+                     if(!bookName || !refPart) return `[Invalid Ref: ${passageRef}]`;
+                     return findText(bookName, refPart);
+                }
+                if (lastSpaceIndex === -1) return `[Invalid Ref: ${passageRef}]`;
+
+                const bookName = passageRef.substring(0, lastSpaceIndex).trim();
+                const refPart = passageRef.substring(lastSpaceIndex + 1).trim();
+                return findText(bookName, refPart);
+            };
+            
+            const findText = (bookName, refPart) => {
+                const urnBook = BOOK_NAME_MAP[bookName] || BOOK_NAME_MAP[bookName.replace(/s$/,'')]; // Handle Psalm/Psalms
+                if (!urnBook) return `[Book Not Mapped: ${bookName}]`;
+
+                let chapter, startVerse, endVerse;
+                const chapterVerseMatch = refPart.match(/^(\d+):(\d+)(?:-(\d+))?$/);
+                const chapterOnlyMatch = refPart.match(/^(\d+)$/);
+
+                if (chapterVerseMatch) {
+                    chapter = parseInt(chapterVerseMatch[1]);
+                    startVerse = parseInt(chapterVerseMatch[2]);
+                    endVerse = chapterVerseMatch[3] ? parseInt(chapterVerseMatch[3]) : startVerse;
+                } else if (chapterOnlyMatch) {
+                    chapter = parseInt(chapterOnlyMatch[1]);
+                    startVerse = 1;
+                    endVerse = 200; // Look for up to 200 verses
+                } else {
+                    return `[Could not parse ref: ${refPart}]`;
+                }
+
+                const textParts = [];
+                for (let v = startVerse; v <= endVerse; v++) {
+                    const urn = `urn:cts:compnov:bible.${urnBook}.vulgate:${chapter}.${v}`;
+                    if (vulgateMap.has(urn)) {
+                        textParts.push(vulgateMap.get(urn).trim());
+                    } else if (chapterOnlyMatch && v > 1) {
+                        break; // Stop searching for a whole chapter after the first miss
+                    }
+                }
+
+                return textParts.length > 0 ? textParts.join(' ') : `[Text not found for ${bookName} ${refPart}]`;
+            };
+
+
+            // --- UI & RENDERING ---
+            const createColumn = (label, text) => { const c=document.createElement('div');c.className='passage-column';c.innerHTML=`<h4>${label}</h4><p>${text}</p>`;return c;};
+            const handlePassageClick = (e)=>{e.preventDefault();const p=e.target.textContent,t=e.target.dataset.type;dom.passageReference.textContent=p;dom.passageColumns.innerHTML='';const isNT=t==='nt'||t==='gospel',isOT=t==='ot'||t==='psalms';const latinText=getVulgateText(p);if(isNT){dom.passageColumns.appendChild(createColumn('Greek',p));dom.passageColumns.appendChild(createColumn('Latin',latinText));}else if(isOT){dom.passageColumns.appendChild(createColumn('Greek',p));dom.passageColumns.appendChild(createColumn('Latin',latinText));dom.passageColumns.appendChild(createColumn('Hebrew',p));}dom.passageContainer.classList.remove('hidden');};
+            const updateReadingsDisplay=()=>{const cI=getLectionaryCycleInfo(selectedDate),sDs=getSpecialDaysForYear(selectedDate.getFullYear()),dK=`${selectedDate.getFullYear()}-${selectedDate.getMonth()}-${selectedDate.getDate()}`,sD=sDs.get(dK);dom.passageContainer.classList.add('hidden');if(sD&&cI.cycle==='A'&&lectionaryDataA.has(sD.lookupLabel)){const r=lectionaryDataA.get(sD.lookupLabel);dom.readingDayLabel.textContent=sD.displayLabel;['psalms','ot','nt','gospel'].forEach(t=>{const el=dom[t+'Reading'];el.innerHTML='';parsePassageString(r[t]).forEach((p,i)=>{if(i>0)el.append(' / ');const a=document.createElement('a');a.href='#';a.textContent=p;a.className='passage-link';a.dataset.type=t;a.addEventListener('click',handlePassageClick);el.appendChild(a);});});dom.readingsContainer.classList.remove('hidden');}else{dom.readingsContainer.classList.add('hidden');}};
+            const renderCalendar=d=>{dom.calendarBody.innerHTML='';const y=d.getFullYear(),m=d.getMonth();dom.monthYear.textContent=d.toLocaleDateString('en-US',{month:'long',year:'numeric'});const sDY=getSpecialDaysForYear(y),fD=new Date(y,m,1),dIM=new Date(y,m+1,0).getDate(),sDW=fD.getDay(),t=new Date();let cD=1;for(let i=0;i<6;i++){const r=document.createElement('tr');for(let j=0;j<7;j++){const ce=document.createElement('td');if((i===0&&j<sDW)||cD>dIM){ce.classList.add('empty');}else{const dN=cD,ceD=new Date(y,m,dN);ce.innerHTML=`<span class="day-number">${dN}</span>`;const dK=`${y}-${m}-${dN}`,sD=sDY.get(dK);if(sD){ce.innerHTML+=`<div class="special-day-label">${sD.displayLabel}</div>`;if(sD.className)ce.classList.add(sD.className);}
+            if(ceD.toDateString()===t.toDateString())ce.classList.add('today');
+            if(ceD.toDateString()===selectedDate.toDateString())ce.classList.add('selected');
+            ce.addEventListener('click',()=>{selectedDate=ceD;updateAllDisplays();});cD++;}
+            r.appendChild(ce);}
+            dom.calendarBody.appendChild(r);if(cD>dIM)break;}};
+            const updateAllDisplays=()=>{dom.selectedDate.textContent=`Selected Date: ${formatDate(selectedDate)}`;const cI=getLectionaryCycleInfo(calendarDisplayDate),b=getLectionaryYearBoundaries(cI.year);dom.lectionaryCycle.innerHTML=`Lectionary Cycle: <span>${cI.cycle}</span> (${formatShortDate(b.start)} - ${formatShortDate(b.end)})`;renderCalendar(calendarDisplayDate);updateReadingsDisplay();};
+
+            // --- INITIALIZATION ---
+            const initialize = () => {
+                lectionaryDataA = parseLectionaryData(RCL_A_DATA);
+                vulgateMap = parseVulgateData(VULGATE_DATA);
+                let iS=new Date();iS.setHours(0,0,0,0);if(iS.getDay()!==0)iS.setDate(iS.getDate()+(7-iS.getDay()));
+                selectedDate=iS;calendarDisplayDate=new Date();
+                dom.prevMonthBtn.addEventListener('click',()=>{calendarDisplayDate.setMonth(calendarDisplayDate.getMonth()-1);updateAllDisplays();});
+                dom.nextMonthBtn.addEventListener('click',()=>{calendarDisplayDate.setMonth(calendarDisplayDate.getMonth()+1);updateAllDisplays();});
+                updateAllDisplays();
+            };
+            initialize();
+        });
+    </script>
+</body>
+</html>
+
+
+
+							<script>
+                            	
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- DATA ---
+            const RCL_A_DATA = `Feast|Psalm|OT|NT|Gospel
+Advent 1|122|Isaiah 2:1-5|Romans 13:8-14|Matthew 24:37-44
+Advent 2|72 or 72:1-8|Isaiah 11:1-10|Romans 15:4-13|Matthew 3:1-12
+Advent 3|146 or 146:4-9|Isaiah 35:1-10|James 5:7-10|Matthew 11:2-11
+Advent 4|24 or 24:1-7|Isaiah 7:10-17|Romans 1:1-7|Matthew 1:18-25
+Christmas|96 or 96:1-4,11-12|Isaiah 9:2-4,6-7|Titus 2:11-14|Luke 2:1-14(15-20)
+Christmastide 1|147 or 147:13-21|Isaiah 61:10-62:3|Galatians 3:23-25: 4:4-7|John 1:1-18
+Christmastide 2|84 or 84:1-8|Jeremiah 31:7-14|Ephesians 1:3-6,15-19a|Matthew 2:13-15,19-23 or Luke 2:41-52
+Epiphany|72 or 72:1-2,10-17|Isaiah 60:1-6,9|Ephesians 3:1-12|Matthew 2:1-12
+Epiphany 1|40:1-12 or 40:1-11|Isaiah 49:1-7|1 Corinthians 1:1-9|John 1:29-41
+Epiphany 2|63:1-8|Isaiah 49:8-16a|1 Corinthians 1:10-17|John 2:1-11
+Epiphany 3|27 or 27:1-9|Isaiah 9:1-4|1 Corinthians 1:18-25(26-31)|Matthew 4:12-23
+Epiphany 4|15 or Canticle 18 or 19|Micah 6:1-8|1 Corinthians 2:1-11(12-16)|Matthew 5:1-12
+Epiphany 5|112|Isaiah 58:5-12|1 Corinthians 3:1-9|Matthew 5:13-20
+Epiphany 6|119:1-16 or 119:1-8|Deuteronomy 30:15-20|1 Corinthians 3:10-11,16-23|Matthew 5:21-24(25-26)27-37
+Epiphany 7|99|Leviticus 19:1-2,9-18|1 Corinthians 4:1-5(6-7)8-13|Matthew 5:38-48
+Transfiguration|99|Exodus 24:12(13-14)15-18|Philippians 3:7-14|Matthew 17:1-9
+Ash Wednesday|103 or 103:8-14|Joel 2:1-2,12-17 or Isaiah 58:1-12|2 Corinthians 5:20b-6:10|Matthew 6:1-6,16-21
+Lent 1|51 or 51:1-13|Genesis 2:4b-9,15-17,25-3:7|Romans 5:12-19(20-21)|Matthew 4:1-11
+Lent 2|33:12-22|Genesis 12:1-8|Romans 4:1-5(6-12)13-17|John 3:1-17
+Lent 3|95 or 95:6-11|Exodus 17:1-7|Romans 5:1-11|John 4:5-26(27-38)39-42
+Lent 4|23|1 Samuel 16:1-13|Ephesians 5:(1-7)8-14|John 9:1-13(14-27)28-38
+Lent 5|130|Ezekiel 37:1-3(4-10)11-14|Romans 6:16-23|John 11:(1-17)18-44
+Palm Sunday|22:1-21 or 22:1-11|Isaiah 45:21-25 or Isaiah 52:13-53:12|Philippians 2:5-11|Matthew (26:36-75) 27:1-54(55-66)
+Easter|118:14-17,22-24 or 118:14-24|Acts 10:34-43 or Exodus 14:10-14,21-25; 15:20-21|Colossians 3:1-4 or Acts 10:34-43|John 20:1-10(11-18) or Matthew 28:1-10
+Easter 1|111 or 118:19-24|Acts 2:14a,22-32 or Genesis 8:6-16; 9:8-16|1 Peter 1:3-9 or Acts 2:14a,22-32|John 20:19-31
+Easter 2|116 or 116:10-17|Acts 2:14a,36-47 or Isaiah 43:1-12|1 Peter 1:17-23 or Acts 2:14a,36-47|Luke 24:13-35
+Easter 3|23|Acts 6:1-9; 7:2a,51-60 or Nehemiah 9:6-15|1 Peter 2:19-25 or Acts 6:1-9; 7:2a,51-60|John 10:1-10
+Easter 4|66:1-11 or 66:1-8|Acts 17:1-15 or Deuteronomy 6:20-25|1 Peter 2:1-10 or Acts 17:1-15|John 14:1-14
+Easter 5|148 or 148:7-14|Acts 17:22-31 or Isaiah 41:17-20|1 Peter 3:8-18 or Acts 17:22-31|John 15:1-8
+Easter 6|68:1-20 or 47|Acts 1:(1-7)8-14 or Ezekiel 39:21-29|1 Peter 4:12-19 or Acts 1:(1-7)8-14|John 17:1-11
+Pentecost|104:25-37 or 104:24-32 or 33:12-15,18-22|Acts 2:1-11 or Numbers 11:24-30|1 Corinthians 12:4-13 or Acts 2:1-11|John 20:19-23 or John 7:37-39a
+Trinity Sunday|Canticle 2 or 13|Genesis 1:1-2:3|2 Corinthians 13:(5-10)11-13|Matthew 28:16-20
+Christ the King|95 or 95:1-7|Ezekiel 34:11-17|1 Corinthians 15:20-28|Matthew 25:31-46
+Proper 1|119:1-16 or 119:9-16|Ecclesiasticus 15:11-20|1 Corinthians 3:1-9|Matthew 5:21-24,27-30,33-37
+Proper 2|71 or 71:16-24|Leviticus 19:1-2,9-18|1 Corinthians 3:10-11,16-23|Matthew 5:38-48
+Proper 3|62 or 62:6-14|Isaiah 49:8-18|1 Corinthians 4:1-5(6-7)8-13|Matthew 6:24-34
+Proper 4|31 or 31:1-5,19-24|Deuteronomy 11:18-21,26-28|Romans 3:21-25a,28|Matthew 7:21-27
+Proper 5|50 or 50:7-15|Hosea 5:15-6:6|Romans 4:13-18|Matthew 9:9-13
+Proper 6|100|Exodus 19:2-8a|Romans 5:6-11|Matthew 9:35-10:8(9-15)
+Proper 7|69:1-18 or 69:7-10,16-18|Jeremiah 20:7-13|Romans 5:15b-19|Matthew 10:(16-23)24-33
+Proper 8|89:1-18 or 89:1-4,15-18|Isaiah 2:10-17|Romans 6:3-11|Matthew 10:34-42
+Proper 9|145 or 145:8-14|Zechariah 9:9-12|Romans 7:21-8:6|Matthew 11:25-30
+Proper 10|65 or 65:9-14|Isaiah 55:1-5,10-13|Romans 8:9-17|Matthew 13:1-9,18-23
+Proper 11|86 or 86:11-17|Wisdom 12:13,16-19|Romans 8:18-25|Matthew 13:24-30,36-43
+Proper 12|119:121-136 or 119:129-136|1 Kings 3:5-12|Romans 8:26-34|Matthew 13:31-33,44-49a
+Proper 13|78:1-29 or 78:14-20,23-25|Nehemiah 9:16-20|Romans 8:35-39|Matthew 14:13-21
+Proper 14|29|Jonah 2:1-9|Romans 9:1-5|Matthew 14:22-33
+Proper 15|67|Isaiah 56:1(2-5)6-7|Romans 11:13-15,29-32|Matthew 15:21-28
+Proper 16|138|Isaiah 51:1-6|Romans 11:33-36|Matthew 16:13-20
+Proper 17|26 or 26:1-8|Jeremiah 15:15-21|Romans 12:1-8|Matthew 16:21-27
+Proper 18|119:33-48 or 119:33-40|Ezekiel 33:(1-6)7-11|Romans 12:9-21|Matthew 18:15-20
+Proper 19|103 or 103:8-13|Ecclesiasticus 27:30-28:7|Romans 14:5-12|Matthew 18:21-35
+Proper 20|145 or 145:1-8|Jonah 3:10-4:11|Philippians 1:21-27|Matthew 20:1-16
+Proper 21|25:1-14 or 25:3-9|Ezekiel 18:1-4,25-32|Philippians 2:1-13|Matthew 21:28-32
+Proper 22|80 or 80:7-14|Isaiah 5:1-7|Philippians 3:14-21|Matthew 21:33-43
+Proper 23|23|Isaiah 25:1-9|Philippians 4:4-13|Matthew 22:1-14
+Proper 24|96 or 96:1-9|Isaiah 45:1-7|1 Thessalonians 1:1-10|Matthew 22:15-22
+Proper 25|1|Exodus 22:21-27|1 Thessalonians 2:1-8|Matthew 22:34-46
+Proper 26|43|Micah 3:5-12|1 Thessalonians 2:9-13,17-20|Matthew 23:1-12
+Proper 27|70|Amos 5:18-24|1 Thessalonians 4:13-18|Matthew 25:1-13
+Proper 28|90 or 90:1-8,12|Zephaniah 1:7,12-18|1 Thessalonians 5:1-10|Matthew 25:14-15,19-29
+Proper 29|95:1-7|Ezekiel 34:11-17|1 Corinthians 15:20-28|Matthew 25:31-46`;
+            
+            const VULGATE_DATA = `urn:cts:compnov:bible.genesis.vulgate:1.1|In principio creavit Deus caelum et terram.
+urn:cts:compnov:bible.genesis.vulgate:1.2|Terra autem erat inanis et vacua, et tenebrae erant super faciem abyssi: et spiritus Dei ferebatur super aquas.
+urn:cts:compnov:bible.genesis.vulgate:1.3|Dixitque Deus: Fiat lux. Et facta est lux.
+urn:cts:compnov:bible.genesis.vulgate:1.4|Et vidit Deus lucem quod esset bona: et divisit lucem a tenebris.
+urn:cts:compnov:bible.genesis.vulgate:1.5|Appellavitque lucem Diem, et tenebras Noctem: factumque est vespere et mane, dies unus.
+urn:cts:compnov:bible.genesis.vulgate:1.6|Dixit quoque Deus: Fiat firmamentum in medio aquarum: et dividat aquas ab aquis.
+urn:cts:compnov:bible.genesis.vulgate:1.7|Et fecit Deus firmamentum, divisitque aquas, quae erant sub firmamento, ab his, quae erant super firmamentum. Et factum est ita.
+urn:cts:compnov:bible.genesis.vulgate:1.8|Vocavitque Deus firmamentum, Caelum: et factum est vespere et mane, dies secundus.
+urn:cts:compnov:bible.genesis.vulgate:1.9|Dixit vero Deus: Congregentur aquae, quae sub caelo sunt, in locum unum: et appareat arida. Et factum est ita.
+urn:cts:compnov:bible.genesis.vulgate:1.10|Et vocavit Deus aridam Terram, congregationesque aquarum appellavit Maria. Et vidit Deus quod esset bonum.
+urn:cts:compnov:bible.psalms.vulgate:50.12|Cor mundum crea in me, Deus, et spiritum rectum innova in visceribus meis.
+urn:cts:compnov:bible.psalms.vulgate:50.13|Ne projicias me a facie tua, et spiritum sanctum tuum ne auferas a me.
+urn:cts:compnov:bible.psalms.vulgate:50.14|Redde mihi laetitiam salutaris tui, et spiritu principali confirma me.
+urn:cts:compnov:bible.psalms.vulgate:50.15|Docebo iniquos vias tuas, et impii ad te convertentur.
+urn:cts:compnov:bible.psalms.vulgate:50.16|Libera me de sanguinibus, Deus, Deus salutis meae, et exsultabit lingua mea justitiam tuam.
+urn:cts:compnov:bible.psalms.vulgate:50.17|Domine, labia mea aperies, et os meum annuntiabit laudem tuam.
+urn:cts:compnov:bible.psalms.vulgate:50.18|Quoniam si voluisses sacrificium, dedissem utique; holocaustis non delectaberis.
+urn:cts:compnov:bible.psalms.vulgate:50.19|Sacrificium Deo spiritus contribulatus; cor contritum et humiliatum, Deus, non despicies.
+urn:cts:compnov:bible.psalms.vulgate:50.20|Benigne fac, Domine, in bona voluntate tua Sion, ut aedificentur muri Jerusalem.
+urn:cts:compnov:bible.psalms.vulgate:50.21|Tunc acceptabis sacrificium justitiae, oblationes et holocausta; tunc imponent super altare tuum vitulos.]
+urn:cts:compnov:bible.psalms.vulgate:51.1|In finem. Intellectus David,
+urn:cts:compnov:bible.psalms.vulgate:51.2|cum venit Doëg Idumaeus, et nuntiavit Sauli: Venit David in domum Achimelech.
+urn:cts:compnov:bible.deuteronomy.vulgate:1.1|Haec sunt verba quae locutus est Moyses ad omnem Israël trans Jordanem in solitudine campestri, contra mare Rubrum, inter Pharan et Tophel et Laban et Haseroth, ubi auri est plurimum:
+urn:cts:compnov:bible.deuteronomy.vulgate:1.2|undecim diebus de Horeb per viam montis Seir usque ad Cadesbarne.`;
+
+            // --- STATE & DATA ---
+            let selectedDate, calendarDisplayDate, lectionaryDataA, vulgateMap;
+            const specialDaysCache = new Map();
+            const BOOK_NAME_MAP = {
+                'Genesis': 'genesis', 'Exodus': 'exodus', 'Leviticus': 'leviticus', 'Numbers': 'numbers', 'Deuteronomy': 'deuteronomy',
+                '1 Samuel': '1samuel', '2 Samuel': '2samuel', '1 Kings': '1kings', '2 Kings': '2kings', 'Isaiah': 'isaiah', 'Jeremiah': 'jeremiah',
+                'Ezekiel': 'ezekiel', 'Hosea': 'hosea', 'Joel': 'joel', 'Amos': 'amos', 'Jonah': 'jonah', 'Micah': 'micah',
+                'Zephaniah': 'zephaniah', 'Zechariah': 'zechariah', 'Nehemiah': 'nehemiah', 'Psalm': 'psalms', 'Psalms': 'psalms',
+                'Wisdom': 'wisdom', 'Ecclesiasticus': 'sirach',
+                'Matthew': 'matthew', 'Mark': 'mark', 'Luke': 'luke', 'John': 'john', 'Acts': 'acts',
+                'Romans': 'romans', '1 Corinthians': '1corinthians', '2 Corinthians': '2corinthians', 'Galatians': 'galatians',
+                'Ephesians': 'ephesians', 'Philippians': 'philippians', 'Colossians': 'colossians', '1 Thessalonians': '1thessalonians',
+                '2 Thessalonians': '2thessalonians', 'Titus': 'titus', 'Hebrews': 'hebrews', 'James': 'james',
+                '1 Peter': '1peter', '2 Peter': '2peter'
+            };
+
+            // --- DOM ELEMENTS ---
+            const dom = { selectedDate: document.getElementById('selectedDateDisplay'), lectionaryCycle: document.getElementById('lectionaryCycleDisplay'), monthYear: document.getElementById('monthYearDisplay'), calendarBody: document.getElementById('calendarBody'), prevMonthBtn: document.getElementById('prevMonthBtn'), nextMonthBtn: document.getElementById('nextMonthBtn'), readingsContainer: document.getElementById('readingsDisplayContainer'), readingDayLabel: document.getElementById('readingDayLabel'), psalmsReading: document.getElementById('psalmsReading'), otReading: document.getElementById('otReading'), ntReading: document.getElementById('ntReading'), gospelReading: document.getElementById('gospelReading'), passageContainer: document.getElementById('passageDisplayContainer'), passageReference: document.getElementById('passageReference'), passageColumns: document.getElementById('passageColumns') };
+
+            // --- PARSING & HELPERS ---
+            const parseLectionaryData = t => { const m=new Map();t.trim().split('\n').slice(1).forEach(r=>{const p=r.split('|').map(s=>s.trim());if(p.length===5&&p[0]){const[l,ps,ot,nt,g]=p;m.set(l,{psalms:ps,ot:ot,nt:nt,gospel:g});if(l==="Proper 29")m.set("Christ the King",{psalms:ps,ot:ot,nt:nt,gospel:g});}});return m; };
+            const parseVulgateData = t => { const m=new Map();t.trim().split('\n').forEach(r=>{const p=r.split('|',2);if(p.length===2&&p[0])m.set(p[0],p[1]);});return m;};
+            const parsePassageString = s => { const f=new Set();s.split(/\s+or\s+/).forEach(p=>{const m=p.match(/(.+?)\s*\((.+?)\)/);if(m){const b=m[1].trim(),e=m[2].trim();f.add(b);f.add(`${b},${e}`);}else{f.add(p.trim());}});return Array.from(f);};
+            const addDays = (d,days) => {const r=new Date(d);r.setDate(r.getDate()+days);return r;};
+            const getNextSunday = d => {const r=new Date(d);r.setDate(d.getDate()+(7-d.getDay())%7);return r;};
+            const formatDate = d => d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+            const formatShortDate = d => d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+            const findFirstSundayOfAdvent = y => {const c=new Date(y,11,25);c.setDate(c.getDate()-c.getDay());return addDays(c,-21);};
+            const getLectionaryCycleInfo=d=>{const y=d.getFullYear(),a=findFirstSundayOfAdvent(y);let lY=(d>=a)?y:y-1;return{cycle:['A','B','C'][((lY-2019)%3+3)%3],year:lY};};
+            const getLectionaryYearBoundaries=lY=>({start:findFirstSundayOfAdvent(lY),end:addDays(findFirstSundayOfAdvent(lY+1),-1)});
+            const getEaster=y=>{const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),month=Math.floor((h+l-7*m+114)/31),day=((h+l-7*m+114)%31)+1;return new Date(y,month-1,day);};
+            const getSpecialDaysForYear=y=>{if(specialDaysCache.has(y))return specialDaysCache.get(y);const sD=new Map();const add=(d,dL,o={})=>{const{lookupLabel:lL=dL,className:cN=null}=o;const k=`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;sD.set(k,{displayLabel:dL,lookupLabel:lL,className:cN});};const e=getEaster(y),fA=findFirstSundayOfAdvent(y),c=new Date(y,11,25);for(let i=0;i<4;i++)add(addDays(fA,i*7),`Advent ${i+1}`,{className:'advent-christmas'});add(c,'Christmas',{className:'advent-christmas'});add(getNextSunday(c),'Christmastide 1');const sS=getNextSunday(addDays(c,7));if(sS<new Date(y+1,0,6))add(sS,'Christmastide 2');const ep=new Date(y,0,6);add(ep,'Epiphany');let cS=getNextSunday(ep);const aW=addDays(e,-46);for(let i=1;i<=8;i++){if(addDays(cS,7)>aW){add(cS,'Transfiguration');break;}add(cS,`Epiphany ${i}`);cS=addDays(cS,7);}
+            add(aW,'Ash Wednesday');cS=getNextSunday(aW);for(let i=1;i<=5;i++){add(cS,`Lent ${i}`);cS=addDays(cS,7);}
+            add(cS,'Palm Sunday');add(e,'Easter');for(let i=1;i<=6;i++)add(addDays(e,i*7),`Easter ${i}`);const p=addDays(e,49);add(p,'Pentecost');const tS=addDays(p,7);add(tS,'Trinity Sunday',{className:'season-after-pentecost'});const cK=addDays(findFirstSundayOfAdvent(y),-7);cS=addDays(tS,7);while(cS<cK){const pN=Math.round((cS-tS)/6048e5)+1,prN=29-Math.round((cK-cS)/6048e5),lL=`Proper ${prN}`,dL=`Pentecost ${pN} / ${lL}`;add(cS,dL,{lookupLabel:lL,className:'season-after-pentecost'});cS=addDays(cS,7);}
+            add(cK,'Christ the King',{className:'season-after-pentecost'});specialDaysCache.set(y,sD);return sD;};
+
+            // --- TEXT RETRIEVAL ---
+            const getVulgateText = (passageRef) => {
+                const lastSpaceIndex = passageRef.lastIndexOf(' ');
+                if (lastSpaceIndex === -1 && !passageRef.includes(':')) { // Handle Psalm 96 case without space
+                     const bookName = passageRef.replace(/\d+/g, '').trim(); // "Psalm"
+                     const refPart = passageRef.replace(/\D+/g, '').trim(); // "96"
+                     if(!bookName || !refPart) return `[Invalid Ref: ${passageRef}]`;
+                     return findText(bookName, refPart);
+                }
+                if (lastSpaceIndex === -1) return `[Invalid Ref: ${passageRef}]`;
+
+                const bookName = passageRef.substring(0, lastSpaceIndex).trim();
+                const refPart = passageRef.substring(lastSpaceIndex + 1).trim();
+                return findText(bookName, refPart);
+            };
+            
+            const findText = (bookName, refPart) => {
+                const urnBook = BOOK_NAME_MAP[bookName] || BOOK_NAME_MAP[bookName.replace(/s$/,'')]; // Handle Psalm/Psalms
+                if (!urnBook) return `[Book Not Mapped: ${bookName}]`;
+
+                let chapter, startVerse, endVerse;
+                const chapterVerseMatch = refPart.match(/^(\d+):(\d+)(?:-(\d+))?$/);
+                const chapterOnlyMatch = refPart.match(/^(\d+)$/);
+
+                if (chapterVerseMatch) {
+                    chapter = parseInt(chapterVerseMatch[1]);
+                    startVerse = parseInt(chapterVerseMatch[2]);
+                    endVerse = chapterVerseMatch[3] ? parseInt(chapterVerseMatch[3]) : startVerse;
+                } else if (chapterOnlyMatch) {
+                    chapter = parseInt(chapterOnlyMatch[1]);
+                    startVerse = 1;
+                    endVerse = 200; // Look for up to 200 verses
+                } else {
+                    return `[Could not parse ref: ${refPart}]`;
+                }
+
+                const textParts = [];
+                for (let v = startVerse; v <= endVerse; v++) {
+                    const urn = `urn:cts:compnov:bible.${urnBook}.vulgate:${chapter}.${v}`;
+                    if (vulgateMap.has(urn)) {
+                        textParts.push(vulgateMap.get(urn).trim());
+                    } else if (chapterOnlyMatch && v > 1) {
+                        break; // Stop searching for a whole chapter after the first miss
+                    }
+                }
+
+                return textParts.length > 0 ? textParts.join(' ') : `[Text not found for ${bookName} ${refPart}]`;
+            };
+
+
+            // --- UI & RENDERING ---
+            const createColumn = (label, text) => { const c=document.createElement('div');c.className='passage-column';c.innerHTML=`<h4>${label}</h4><p>${text}</p>`;return c;};
+            const handlePassageClick = (e)=>{e.preventDefault();const p=e.target.textContent,t=e.target.dataset.type;dom.passageReference.textContent=p;dom.passageColumns.innerHTML='';const isNT=t==='nt'||t==='gospel',isOT=t==='ot'||t==='psalms';const latinText=getVulgateText(p);if(isNT){dom.passageColumns.appendChild(createColumn('Greek',p));dom.passageColumns.appendChild(createColumn('Latin',latinText));}else if(isOT){dom.passageColumns.appendChild(createColumn('Greek',p));dom.passageColumns.appendChild(createColumn('Latin',latinText));dom.passageColumns.appendChild(createColumn('Hebrew',p));}dom.passageContainer.classList.remove('hidden');};
+            const updateReadingsDisplay=()=>{const cI=getLectionaryCycleInfo(selectedDate),sDs=getSpecialDaysForYear(selectedDate.getFullYear()),dK=`${selectedDate.getFullYear()}-${selectedDate.getMonth()}-${selectedDate.getDate()}`,sD=sDs.get(dK);dom.passageContainer.classList.add('hidden');if(sD&&cI.cycle==='A'&&lectionaryDataA.has(sD.lookupLabel)){const r=lectionaryDataA.get(sD.lookupLabel);dom.readingDayLabel.textContent=sD.displayLabel;['psalms','ot','nt','gospel'].forEach(t=>{const el=dom[t+'Reading'];el.innerHTML='';parsePassageString(r[t]).forEach((p,i)=>{if(i>0)el.append(' / ');const a=document.createElement('a');a.href='#';a.textContent=p;a.className='passage-link';a.dataset.type=t;a.addEventListener('click',handlePassageClick);el.appendChild(a);});});dom.readingsContainer.classList.remove('hidden');}else{dom.readingsContainer.classList.add('hidden');}};
+            const renderCalendar=d=>{dom.calendarBody.innerHTML='';const y=d.getFullYear(),m=d.getMonth();dom.monthYear.textContent=d.toLocaleDateString('en-US',{month:'long',year:'numeric'});const sDY=getSpecialDaysForYear(y),fD=new Date(y,m,1),dIM=new Date(y,m+1,0).getDate(),sDW=fD.getDay(),t=new Date();let cD=1;for(let i=0;i<6;i++){const r=document.createElement('tr');for(let j=0;j<7;j++){const ce=document.createElement('td');if((i===0&&j<sDW)||cD>dIM){ce.classList.add('empty');}else{const dN=cD,ceD=new Date(y,m,dN);ce.innerHTML=`<span class="day-number">${dN}</span>`;const dK=`${y}-${m}-${dN}`,sD=sDY.get(dK);if(sD){ce.innerHTML+=`<div class="special-day-label">${sD.displayLabel}</div>`;if(sD.className)ce.classList.add(sD.className);}
+            if(ceD.toDateString()===t.toDateString())ce.classList.add('today');
+            if(ceD.toDateString()===selectedDate.toDateString())ce.classList.add('selected');
+            ce.addEventListener('click',()=>{selectedDate=ceD;updateAllDisplays();});cD++;}
+            r.appendChild(ce);}
+            dom.calendarBody.appendChild(r);if(cD>dIM)break;}};
+            const updateAllDisplays=()=>{dom.selectedDate.textContent=`Selected Date: ${formatDate(selectedDate)}`;const cI=getLectionaryCycleInfo(calendarDisplayDate),b=getLectionaryYearBoundaries(cI.year);dom.lectionaryCycle.innerHTML=`Lectionary Cycle: <span>${cI.cycle}</span> (${formatShortDate(b.start)} - ${formatShortDate(b.end)})`;renderCalendar(calendarDisplayDate);updateReadingsDisplay();};
+
+            // --- INITIALIZATION ---
+            const initialize = () => {
+                lectionaryDataA = parseLectionaryData(RCL_A_DATA);
+                vulgateMap = parseVulgateData(VULGATE_DATA);
+                let iS=new Date();iS.setHours(0,0,0,0);if(iS.getDay()!==0)iS.setDate(iS.getDate()+(7-iS.getDay()));
+                selectedDate=iS;calendarDisplayDate=new Date();
+                dom.prevMonthBtn.addEventListener('click',()=>{calendarDisplayDate.setMonth(calendarDisplayDate.getMonth()-1);updateAllDisplays();});
+                dom.nextMonthBtn.addEventListener('click',()=>{calendarDisplayDate.setMonth(calendarDisplayDate.getMonth()+1);updateAllDisplays();});
+                updateAllDisplays();
+            };
+            initialize();
+        });
+    
+
+							</script>
+                        </body>
+                        </html>
+                    
